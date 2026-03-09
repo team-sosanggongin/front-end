@@ -1,0 +1,25 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 환경변수
+.env
+.env.*
