@@ -1,4 +1,4 @@
-enum AppEnv { 
+enum AppEnv {
   local,     // 서버 없이 Mock으로 동작
   localApi,  // 로컬 개발 서버(10.0.2.2)에 연결
   stg,       // 스테이징 서버
@@ -15,12 +15,14 @@ class EnvConfig {
       case AppEnv.local:
         return 'mock';
       case AppEnv.localApi:
-        // 스웨거 확인 결과: http://10.0.2.2:8080/api/device-tokens
-        return 'http://10.0.2.2:8080/api/'; 
+        return const String.fromEnvironment(
+          'BASE_URL_LOCAL_API',
+          defaultValue: 'http://10.0.2.2:8080/api/',
+        );
       case AppEnv.stg:
-        return 'https://stg-api.sosanggongin.com/api/v1/';
+        return const String.fromEnvironment('BASE_URL_STG');
       case AppEnv.prod:
-        return 'https://api.sosanggongin.com/api/v1/';
+        return const String.fromEnvironment('BASE_URL_PROD');
     }
   }
 
