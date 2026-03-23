@@ -8,8 +8,12 @@ class LocalNotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
+  bool _isInitialized = false;
 
   Future<void> initialize() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
