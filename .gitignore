@@ -10,11 +10,6 @@ build/
 *.freezed.dart
 *.mocks.dart
 
-# Android
-android/.gradle/
-android/local.properties
-android/key.properties
-
 # IDE
 .idea/
 *.iml
@@ -25,4 +20,3 @@ env_local.json
 
 ios
 android
-lib/firebase_options.dart

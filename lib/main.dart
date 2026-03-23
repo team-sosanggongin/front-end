@@ -4,19 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/router.dart';
 import 'services/notification/notification_providers.dart';
 import 'utils/env_config.dart';
-import 'firebase_options.dart';
+import 'core/env/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   print('[정보] 앱 시작 환경: ${EnvConfig.defaultEnv.name}');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -35,20 +29,12 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   Future<void> _setupNotifications() async {
     print('[디버그] 푸시 알림 서비스 설정 시작...');
-    try {
-      await ref.read(pushNotificationHandlerProvider).setup();
-      print('[정보] 푸시 알림 서비스 설정 완료');
-    } catch (e) {
-      print('[오류] 푸시 알림 설정 실패: $e');
-    }
+    await ref.read(pushNotificationHandlerProvider).setup();
   }
 
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
-    return MaterialApp.router(
-      title: 'platform',
-      routerConfig: router,
-    );
+    return MaterialApp.router(title: 'platform', routerConfig: router);
   }
 }
