@@ -21,10 +21,7 @@ android/key.properties
 .vscode/
 
 # 환경변수
-.env
-.env.local
-.env.stg
-.env.prod
+env_local.json
 
 ios
 android

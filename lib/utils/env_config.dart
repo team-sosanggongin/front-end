@@ -6,26 +6,29 @@ enum AppEnv {
 }
 
 class EnvConfig {
-  /// 현재 실행 환경
-  static AppEnv currentEnv = AppEnv.local;
+  static const _envString = String.fromEnvironment('ENV');
 
-  /// 환경별 Base URL 설정 (Dio 표준에 따라 반드시 /로 끝나야 함)
-  static String get baseUrl {
-    switch (currentEnv) {
-      case AppEnv.local:
-        return 'mock';
-      case AppEnv.localApi:
-        return const String.fromEnvironment(
-          'BASE_URL_LOCAL_API',
-          defaultValue: 'http://10.0.2.2:8080/api/',
-        );
-      case AppEnv.stg:
-        return const String.fromEnvironment('BASE_URL_STG');
-      case AppEnv.prod:
-        return const String.fromEnvironment('BASE_URL_PROD');
+  /// 현재 실행 환경 (JSON의 ENV 필드에서 결정)
+  static AppEnv get defaultEnv {
+    switch (_envString.toUpperCase()) {
+      case 'LOCAL':
+        return AppEnv.local;
+      case 'LOCAL_API':
+        return AppEnv.localApi;
+      case 'STG':
+        return AppEnv.stg;
+      case 'PROD':
+        return AppEnv.prod;
+      default:
+        return AppEnv.local;
     }
   }
 
+  /// 환경별 Base URL 설정 (Dio 표준에 따라 반드시 /로 끝나야 함)
+  static String get baseUrl {
+    return const String.fromEnvironment('BASE_URL');
+  }
+
   /// 현재 환경이 Mock 모드인지 확인
-  static bool get isMock => currentEnv == AppEnv.local;
+  static bool get isMock => defaultEnv == AppEnv.local;
 }

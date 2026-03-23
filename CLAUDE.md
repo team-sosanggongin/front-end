@@ -44,17 +44,6 @@ flutter analyze
 
 Environment is set manually in `main.dart`. When `AppEnv.local`, `DeviceTokenService` skips HTTP calls.
 
-### Notification Service Layer
-
-`lib/services/notification/` uses a provider pattern with dependency injection:
-- `PushProvider` — abstract interface for push services
-- `FcmPushProvider` — Firebase implementation
-- `DeviceTokenService` — syncs FCM token to Spring Boot backend via Dio
-- `PushNotificationHandler` — orchestrates initialization: permissions → topic subscription → token sync → listeners
-- `notification_providers.dart` — Riverpod provider wiring
-
-Tests use `FakePushProvider` implementing `PushProvider` to test logic without Firebase dependencies.
-
 ## Key Conventions
 
 - Package name: `platform` (imports use `package:platform/...`)
