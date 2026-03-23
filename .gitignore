@@ -20,3 +20,7 @@ env_local.json
 
 ios
 android
+macos
+windows
+linux
+web
