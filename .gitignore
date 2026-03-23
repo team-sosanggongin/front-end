@@ -22,4 +22,10 @@ android/key.properties
 
 # 환경변수
 .env
-.env.*
+.env.local
+.env.stg
+.env.prod
+
+ios
+android
+lib/firebase_options.dart
