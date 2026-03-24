@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/router.dart';
+import 'core/theme/app_theme.dart';
 import 'services/notification/notification_providers.dart';
 import 'utils/env_config.dart';
 import 'core/env/firebase_options.dart';
@@ -35,6 +36,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
-    return MaterialApp.router(title: 'platform', routerConfig: router);
+    return MaterialApp.router(
+      title: 'platform',
+      theme: AppTheme.light,
+      routerConfig: router,
+    );
   }
 }
