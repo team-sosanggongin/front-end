@@ -12,7 +12,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     routes: [
       ...rootRoutes,
-      ...homeSubRoutes,
+      homeShellRoute,
     ],
   );
 });

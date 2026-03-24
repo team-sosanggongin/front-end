@@ -12,24 +12,19 @@ class NoticesScreen extends StatelessWidget {
     // TODO: API 호출로 대체
     final notices = mockNotices;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('공지사항'),
-      ),
-      body: ListView.separated(
-        itemCount: notices.length,
-        separatorBuilder: (_, _) =>
-            const Divider(height: 1, color: AppColors.borderGray),
-        itemBuilder: (context, index) {
-          return _NoticeListItem(
-            notice: notices[index],
-            onTap: () => context.push(
-              '/home/notices/${notices[index].id}',
-              extra: notices[index],
-            ),
-          );
-        },
-      ),
+    return ListView.separated(
+      itemCount: notices.length,
+      separatorBuilder: (_, _) =>
+          const Divider(height: 1, color: AppColors.borderGray),
+      itemBuilder: (context, index) {
+        return _NoticeListItem(
+          notice: notices[index],
+          onTap: () => context.push(
+            '/home/notices/${notices[index].id}',
+            extra: notices[index],
+          ),
+        );
+      },
     );
   }
 }

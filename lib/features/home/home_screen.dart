@@ -7,51 +7,17 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 20),
-              _buildBanner(),
-              const SizedBox(height: 20),
-              _buildMenuGrid(context),
-            ],
-          ),
-        ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          _buildBanner(),
+          const SizedBox(height: 20),
+          _buildMenuGrid(context),
+        ],
       ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('소상공인', style: AppTextStyles.heading),
-            SizedBox(height: 4),
-          ],
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: const BoxDecoration(
-            color: AppColors.darkBackground,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.person_outline,
-            color: AppColors.white,
-            size: 24,
-          ),
-        ),
-      ],
     );
   }
 
@@ -82,14 +48,7 @@ class HomeScreen extends StatelessWidget {
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '새로운 교육 시스템',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
+              Text('새로운 교육 시스템', style: AppTextStyles.titleMedium),
               SizedBox(height: 4),
               Text(
                 '직원 교육을 더 쉽게 관리하세요',
@@ -136,16 +95,9 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              item.icon,
-              size: 32,
-              color: AppColors.textPrimary,
-            ),
+            Icon(item.icon, size: 32, color: AppColors.textPrimary),
             const SizedBox(height: 12),
-            Text(
-              item.label,
-              style: AppTextStyles.label,
-            ),
+            Text(item.label, style: AppTextStyles.label),
           ],
         ),
       ),
