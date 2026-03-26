@@ -10,16 +10,17 @@ build/
 *.freezed.dart
 *.mocks.dart
 
-# Android
-android/.gradle/
-android/local.properties
-android/key.properties
-
 # IDE
 .idea/
 *.iml
 .vscode/
 
 # 환경변수
-.env
-.env.*
+env_local.json
+
+ios
+android
+macos
+windows
+linux
+web

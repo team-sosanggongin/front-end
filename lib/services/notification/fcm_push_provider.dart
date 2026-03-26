@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:platform/utils/env_config.dart';
 import 'push_provider.dart';
 
 class FcmPushProvider implements PushProvider {
@@ -9,9 +10,13 @@ class FcmPushProvider implements PushProvider {
     NotificationSettings settings = await _fcm.requestPermission(
       alert: true,
       badge: true,
-      sound: true,
+      sound: false,
     );
     print('Push permission status: ${settings.authorizationStatus}');
+    final token = await _fcm.getToken();
+    if(EnvConfig.isMock){
+      print("token : $token");
+    }
   }
 
   @override
