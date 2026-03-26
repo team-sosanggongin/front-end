@@ -6,7 +6,8 @@
       "Bash(rm -f lib/services/notification/notification_router.dart lib/features/orders/order_detail_screen.dart lib/features/reviews/review_detail_screen.dart)",
       "Bash(rmdir -p lib/features/orders lib/features/reviews)",
       "Read(//mnt/c/Users/lookh/IdeaProjects/**)",
-      "Bash(flutter test:*)"
+      "Bash(flutter test:*)",
+      "Bash(find /c/Users/lookh/IdeaProjects/front-end/test -type f -name *.dart)"
     ]
   }
 }
