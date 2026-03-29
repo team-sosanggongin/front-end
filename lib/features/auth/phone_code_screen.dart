@@ -85,7 +85,7 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
   Future<void> _verifyCode(String code) async {
     // TODO: 실제 API 호출로 대체
     if (code == '000000') {
-      context.go('/home');
+      context.push('/salary-consent');
     } else {
       setState(() {
         _hasError = true;

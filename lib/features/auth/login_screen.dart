@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
                 const AppLogo(),
                 const Spacer(flex: 2),
                 _KakaoLoginButton(
-                  onPressed: () => context.push('/phone-verification'),
+                  onPressed: () => context.push('/privacy-consent'),
                 ),
                 const SizedBox(height: 12),
                 const Text(

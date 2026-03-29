@@ -29,7 +29,8 @@ class HomeHeader extends StatelessWidget {
           ] else
             const Text('소상공인', style: AppTextStyles.heading),
           const Spacer(),
-          const UserAvatar(),
+          if (!location.startsWith('/my'))
+            UserAvatar(onTap: () => context.push('/my')),
         ],
       ),
     );
@@ -37,6 +38,8 @@ class HomeHeader extends StatelessWidget {
 
   String _resolveTitle(String location) {
     if (location.startsWith('/home/notices')) return '공지사항';
+    if (location.startsWith('/my/accounts')) return '계좌 정보';
+    if (location.startsWith('/my')) return '마이페이지';
     return '';
   }
 }

@@ -5,6 +5,8 @@ import '../../../features/home/home_shell_layout.dart';
 import '../../../features/home/models/notice.dart';
 import '../../../features/home/notice_detail_screen.dart';
 import '../../../features/home/notices_screen.dart';
+import '../../../features/my/my_page_screen.dart';
+import '../../../features/account/account_list_screen.dart';
 
 final homeShellNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,6 +28,14 @@ final homeShellRoute = ShellRoute(
         final notice = state.extra as Notice;
         return NoticeDetailScreen(notice: notice);
       },
+    ),
+    GoRoute(
+      path: '/my',
+      builder: (context, state) => const MyPageScreen(),
+    ),
+    GoRoute(
+      path: '/my/accounts',
+      builder: (context, state) => const AccountListScreen(),
     ),
   ],
 );
