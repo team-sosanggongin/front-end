@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/tag_badge.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
 import '../my/user_provider.dart';
 
 class AccountListScreen extends ConsumerWidget {
@@ -29,16 +32,18 @@ class AccountListScreen extends ConsumerWidget {
     if (accounts.isEmpty) {
       return Center(
         child: Text(
-          '등록된 계좌가 없습니다.',
+          S.of(context).noRegisteredAccounts,
           style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
         ),
       );
     }
 
+    final rs = ResponsiveSize.of(context);
+
     return ListView.separated(
-      padding: const EdgeInsets.all(24),
+      padding: rs.pxy(horizontal: 24, vertical: 24),
       itemCount: accounts.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      separatorBuilder: (_, __) => SizedBox(height: rs.h(16)),
       itemBuilder: (context, index) => _AccountCard(
         account: accounts[index],
         onDelete: () => _showDeleteDialog(context, ref, accounts[index].id),
@@ -47,20 +52,22 @@ class AccountListScreen extends ConsumerWidget {
   }
 
   Widget _buildAddButton(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      padding: rs.fromLTRB(24, 0, 24, 24),
       child: OutlinedButton(
         // 마이페이지에서 계좌 추가 → 급여동의부터 시작 (나중에 하기 버튼 숨김)
-        onPressed: () => context.push('/salary-consent', extra: true),
+        onPressed: () => context.push(ConsentPath.salary, extra: true),
         style: OutlinedButton.styleFrom(
-          minimumSize: const Size(double.infinity, 56),
+          minimumSize: Size(double.infinity, rs.h(56)),
           side: const BorderSide(color: AppColors.dark),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: rs.radius(12),
           ),
         ),
         child: Text(
-          '+ 계좌 추가',
+          S.of(context).addAccountButton,
           style:
           AppTextStyles.buttonText.copyWith(color: AppColors.darkBackground),
         ),
@@ -73,12 +80,12 @@ class AccountListScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('계좌 삭제', style: AppTextStyles.titleMedium),
-        content: const Text('해당 계좌를 삭제하시겠습니까?', style: AppTextStyles.body),
+        title: Text(S.of(context).deleteAccountTitle, style: AppTextStyles.titleMedium),
+        content: Text(S.of(context).deleteAccountConfirmation, style: AppTextStyles.body),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('취소',
+            child: Text(S.of(context).cancelButton,
                 style: AppTextStyles.label
                     .copyWith(color: AppColors.textSecondary)),
           ),
@@ -87,7 +94,7 @@ class AccountListScreen extends ConsumerWidget {
               ref.read(accountListProvider.notifier).removeAccount(accountId);
               Navigator.pop(context);
             },
-            child: Text('삭제',
+            child: Text(S.of(context).deleteButton,
                 style:
                 AppTextStyles.label.copyWith(color: AppColors.error)),
           ),
@@ -105,78 +112,88 @@ class _AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: rs.pxy(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: rs.radius(16),
         border: Border.all(color: AppColors.borderGray),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TagBadge(label: account.type),
-          const SizedBox(height: 12),
-          _buildInfoRow('은행', account.bankName,
+          SizedBox(height: rs.h(12)),
+          _buildInfoRow(context, S.of(context).bankLabel, account.bankName,
               valueStyle: AppTextStyles.titleMedium),
-          const SizedBox(height: 10),
-          _buildInfoRow('계좌번호', account.accountNumber),
-          const SizedBox(height: 10),
-          _buildInfoRow('예금주', account.accountHolder),
-          const SizedBox(height: 16),
-          _buildActions(context),  // context 전달
+          SizedBox(height: rs.h(10)),
+          _buildInfoRow(context, S.of(context).accountNumberLabel, account.accountNumber),
+          SizedBox(height: rs.h(10)),
+          _buildInfoRow(context, S.of(context).accountHolderLabel, account.accountHolder),
+          SizedBox(height: rs.h(16)),
+          _buildActions(context),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {TextStyle? valueStyle}) {
+  Widget _buildInfoRow(BuildContext context, String label, String value, {TextStyle? valueStyle}) {
+    final rs = ResponsiveSize.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTextStyles.caption),
-        const SizedBox(height: 2),
+        SizedBox(height: rs.h(2)),
         Text(value, style: valueStyle ?? AppTextStyles.body),
       ],
     );
   }
 
   Widget _buildActions(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return Row(
       children: [
         Expanded(child: _buildChangeButton(context)),
-        const SizedBox(width: 8),
-        Expanded(child: _buildDeleteButton()),
+        SizedBox(width: rs.w(8)),
+        Expanded(child: _buildDeleteButton(context)),
       ],
     );
   }
 
   Widget _buildChangeButton(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return OutlinedButton(
       // 변경도 급여동의부터 시작 (fromMyPage: true)
-      onPressed: () => context.push('/salary-consent', extra: true),
+      onPressed: () => context.push(ConsentPath.salary, extra: true),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.borderGray),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        RoundedRectangleBorder(borderRadius: rs.radius(8)),
+        padding: rs.py(10),
       ),
-      child: Text('변경',
+      child: Text(S.of(context).changeButton,
           style:
           AppTextStyles.label.copyWith(color: AppColors.textPrimary)),
     );
   }
 
-  Widget _buildDeleteButton() {
+  Widget _buildDeleteButton(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return OutlinedButton(
       onPressed: onDelete,
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.error),
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        RoundedRectangleBorder(borderRadius: rs.radius(8)),
+        padding: rs.py(10),
       ),
-      child: Text('삭제',
+      child: Text(S.of(context).deleteButton,
           style: AppTextStyles.label.copyWith(color: AppColors.error)),
     );
   }

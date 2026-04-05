@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../route_path.dart';
 import '../../../features/home/home_screen.dart';
 import '../../../features/home/home_shell_layout.dart';
 import '../../../features/home/models/notice.dart';
@@ -15,26 +16,26 @@ final homeShellRoute = ShellRoute(
   builder: (context, state, child) => HomeShellLayout(child: child),
   routes: [
     GoRoute(
-      path: '/home',
+      path: HomePath.root,
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/home/notices',
+      path: HomePath.notices,
       builder: (context, state) => const NoticesScreen(),
     ),
     GoRoute(
-      path: '/home/notices/:id',
+      path: '${HomePath.notices}/:id',
       builder: (context, state) {
         final notice = state.extra as Notice;
         return NoticeDetailScreen(notice: notice);
       },
     ),
     GoRoute(
-      path: '/my',
+      path: MyPath.root,
       builder: (context, state) => const MyPageScreen(),
     ),
     GoRoute(
-      path: '/my/accounts',
+      path: MyPath.accounts,
       builder: (context, state) => const AccountListScreen(),
     ),
   ],

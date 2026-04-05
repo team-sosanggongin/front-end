@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:platform/l10n/app_localizations.dart';
 import 'package:platform/features/auth/login_screen.dart';
 import 'package:platform/features/auth/phone_verification_screen.dart';
 import 'package:platform/features/auth/phone_code_screen.dart';
@@ -44,7 +45,14 @@ GoRouter _buildTestRouter(String initialLocation) {
 }
 
 Widget _buildTestApp(GoRouter router) {
-  return ProviderScope(child: MaterialApp.router(routerConfig: router));
+  return ProviderScope(
+    child: MaterialApp.router(
+      routerConfig: router,
+      localizationsDelegates: S.localizationsDelegates,
+      supportedLocales: S.supportedLocales,
+      locale: const Locale('ko'),
+    ),
+  );
 }
 
 const _mockNotice = Notice(
@@ -119,6 +127,9 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
+            localizationsDelegates: S.localizationsDelegates,
+            supportedLocales: S.supportedLocales,
+            locale: const Locale('ko'),
             home: Scaffold(
               body: const NoticesScreen(),
             ),

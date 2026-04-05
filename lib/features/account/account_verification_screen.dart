@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/primary_button.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
 import '../consent/consent_provider.dart';
 
 class AccountVerificationScreen extends ConsumerStatefulWidget {
@@ -77,20 +80,24 @@ class _AccountVerificationScreenState
   }
 
   Widget _buildContent(List<String> banks) {
+    final rs = ResponsiveSize.of(context);
+
+    final l = S.of(context);
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: rs.px(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
-          const Text('계좌 정보를 입력해 주세요', style: AppTextStyles.heading),
-          const SizedBox(height: 8),
-          const Text('급여 수령에 사용될 계좌를 등록해 주세요', style: AppTextStyles.subtitle),
-          const SizedBox(height: 32),
+          SizedBox(height: rs.h(8)),
+          Text(l.enterAccountInfoTitle, style: AppTextStyles.heading),
+          SizedBox(height: rs.h(8)),
+          Text(l.registerAccountSubtitle, style: AppTextStyles.subtitle),
+          SizedBox(height: rs.h(32)),
           _buildBankDropdown(banks),
-          const SizedBox(height: 20),
+          SizedBox(height: rs.h(20)),
           _buildAccountNumberField(),
-          const SizedBox(height: 20),
+          SizedBox(height: rs.h(20)),
           _buildNotice(),
         ],
       ),
@@ -98,21 +105,23 @@ class _AccountVerificationScreenState
   }
 
   Widget _buildBankDropdown(List<String> banks) {
+    final rs = ResponsiveSize.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('은행', style: AppTextStyles.label),
-        const SizedBox(height: 8),
+        Text(S.of(context).bankLabel, style: AppTextStyles.label),
+        SizedBox(height: rs.h(8)),
         CompositedTransformTarget(
           link: _layerLink,
           child: GestureDetector(
             onTap: () => _toggleDropdown(banks),
             child: Container(
-              height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: rs.h(52),
+              padding: rs.px(16),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: rs.radius(10),
                 border: Border.all(
                   color: _isDropdownOpen ? AppColors.dark : AppColors.borderGray,
                   width: _isDropdownOpen ? 1.5 : 1,
@@ -122,7 +131,7 @@ class _AccountVerificationScreenState
                 children: [
                   Expanded(
                     child: Text(
-                      _selectedBank ?? '은행을 선택하세요',
+                      _selectedBank ?? S.of(context).selectBankHint,
                       style: AppTextStyles.body.copyWith(
                         color: _selectedBank != null
                             ? AppColors.textPrimary
@@ -146,38 +155,42 @@ class _AccountVerificationScreenState
   }
 
   Widget _buildAccountNumberField() {
+    final rs = ResponsiveSize.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('계좌번호', style: AppTextStyles.label),
-        const SizedBox(height: 8),
+        Text(S.of(context).accountNumberLabel, style: AppTextStyles.label),
+        SizedBox(height: rs.h(8)),
         TextField(
           controller: _accountController,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           style: AppTextStyles.body,
           onChanged: (_) => setState(() {}),
-          decoration: AppInputDecorations.outlined(hintText: '\'-\' 없이 숫자만 입력'),
+          decoration: AppInputDecorations.outlined(hintText: S.of(context).accountNumberHint),
         ),
       ],
     );
   }
 
   Widget _buildNotice() {
+    final rs = ResponsiveSize.of(context);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: rs.pxy(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.lightGray,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: rs.radius(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('안내사항', style: AppTextStyles.label),
-          const SizedBox(height: 6),
+          Text(S.of(context).noticeLabel, style: AppTextStyles.label),
+          SizedBox(height: rs.h(6)),
           Text(
-            '입력하신 계좌는 급여 수령 계좌로만 사용되며, 본인 명의의 계좌만 등록 가능합니다.',
+            S.of(context).accountRegistrationNotice,
             style: AppTextStyles.subtitle,
           ),
         ],
@@ -186,65 +199,70 @@ class _AccountVerificationScreenState
   }
 
   Widget _buildBottomButton() {
+    final rs = ResponsiveSize.of(context);
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      padding: rs.fromLTRB(24, 0, 24, 24),
       child: PrimaryButton(
-        text: '등록하기',
+        text: S.of(context).registerButton,
         enabled: _canSubmit,
-        onPressed: _canSubmit ? () => context.go('/home') : null,
+        onPressed: _canSubmit ? () => context.go(HomePath.root) : null,
       ),
     );
   }
 
   OverlayEntry _buildOverlayEntry(List<String> banks) {
     return OverlayEntry(
-      builder: (context) => Positioned(
-        width: MediaQuery.of(context).size.width - 48,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          offset: const Offset(0, 56),
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.borderGray),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: banks.map((bank) {
-                  final isLast = bank == banks.last;
-                  return InkWell(
-                    onTap: () => _selectBank(bank),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      decoration: BoxDecoration(
-                        border: isLast
-                            ? null
-                            : const Border(
-                          bottom: BorderSide(color: AppColors.borderGray),
-                        ),
-                      ),
-                      child: Text(bank, style: AppTextStyles.body),
+      builder: (context) {
+        final rs = ResponsiveSize.of(context);
+
+        return Positioned(
+          width: rs.screenWidth - rs.w(48),
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0, rs.h(56)),
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: rs.radius(10),
+                  border: Border.all(color: AppColors.borderGray),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: rs.w(12),
+                      offset: Offset(0, rs.h(4)),
                     ),
-                  );
-                }).toList(),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: banks.map((bank) {
+                    final isLast = bank == banks.last;
+                    return InkWell(
+                      onTap: () => _selectBank(bank),
+                      child: Container(
+                        width: double.infinity,
+                        padding: rs.pxy(horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                          border: isLast
+                              ? null
+                              : const Border(
+                            bottom: BorderSide(color: AppColors.borderGray),
+                          ),
+                        ),
+                        child: Text(bank, style: AppTextStyles.body),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

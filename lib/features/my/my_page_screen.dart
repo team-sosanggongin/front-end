@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/user_avatar.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
 import 'user_provider.dart';
 
 class MyPageScreen extends ConsumerWidget {
@@ -15,13 +18,15 @@ class MyPageScreen extends ConsumerWidget {
     final user = ref.watch(userProvider) ??
         const UserModel(id: 'mock_001', name: '홍길동');
 
+    final rs = ResponsiveSize.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 24),
-            _buildProfile(user),
-            const SizedBox(height: 24),
+            SizedBox(height: rs.h(24)),
+            _buildProfile(context, user),
+            SizedBox(height: rs.h(24)),
             const Divider(height: 1, color: AppColors.borderGray),
             _buildAccountMenu(context),
             const Divider(height: 1, color: AppColors.borderGray),
@@ -31,20 +36,22 @@ class MyPageScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfile(UserModel user) {
+  Widget _buildProfile(BuildContext context, UserModel user) {
+    final rs = ResponsiveSize.of(context);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: rs.px(24),
       child: Row(
         children: [
-          const UserAvatar(size: 56),
-          const SizedBox(width: 16),
+          UserAvatar(size: rs.w(56)),
+          SizedBox(width: rs.w(16)),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(user.name, style: AppTextStyles.titleMedium),
-              const SizedBox(height: 2),
+              SizedBox(height: rs.h(2)),
               Text(
-                '프로필 보기',
+                S.of(context).viewProfileLink,
                 style: AppTextStyles.caption.copyWith(
                   decoration: TextDecoration.underline,
                 ),
@@ -57,15 +64,17 @@ class MyPageScreen extends ConsumerWidget {
   }
 
   Widget _buildAccountMenu(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return InkWell(
-      onTap: () => context.push('/my/accounts'),
+      onTap: () => context.push(MyPath.accounts),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: rs.pxy(horizontal: 24, vertical: 20),
         child: Row(
           children: [
-            Expanded(child: Text('계좌 정보', style: AppTextStyles.body)),
-            const Icon(Icons.chevron_right,
-                color: AppColors.textSecondary, size: 24),
+            Expanded(child: Text(S.of(context).accountInfoMenuLabel, style: AppTextStyles.body)),
+            Icon(Icons.chevron_right,
+                color: AppColors.textSecondary, size: rs.w(24)),
           ],
         ),
       ),

@@ -7,7 +7,13 @@
       "Bash(rmdir -p lib/features/orders lib/features/reviews)",
       "Read(//mnt/c/Users/lookh/IdeaProjects/**)",
       "Bash(flutter test:*)",
-      "Bash(find /c/Users/lookh/IdeaProjects/front-end/test -type f -name *.dart)"
+      "Bash(find /c/Users/lookh/IdeaProjects/front-end/test -type f -name *.dart)",
+      "Bash(find /c/Users/USER/IdeaProjects/platform/lib -type f -name *.dart -path */widgets/* -o -path */components/*)",
+      "Bash(while read:*)",
+      "Bash(do sed:*)",
+      "Bash(done)",
+      "Bash(flutter pub:*)",
+      "Bash(flutter gen-l10n:*)"
     ]
   }
 }

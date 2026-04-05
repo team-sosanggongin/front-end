@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
 
 class AuthPageLayout extends StatelessWidget {
   final String title;
@@ -17,6 +18,8 @@ class AuthPageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -24,15 +27,15 @@ class AuthPageLayout extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: rs.px(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
+                    SizedBox(height: rs.h(8)),
                     Text(title, style: AppTextStyles.heading),
-                    const SizedBox(height: 8),
+                    SizedBox(height: rs.h(8)),
                     Text(subtitle, style: AppTextStyles.subtitle),
-                    const SizedBox(height: 32),
+                    SizedBox(height: rs.h(32)),
                     body,
                   ],
                 ),
@@ -40,7 +43,7 @@ class AuthPageLayout extends StatelessWidget {
             ),
             if (bottomButton != null)
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                padding: rs.fromLTRB(24, 0, 24, 24),
                 child: bottomButton!,
               ),
           ],
