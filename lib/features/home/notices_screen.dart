@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/new_badge.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
 import 'models/notice.dart';
 
 class NoticesScreen extends StatelessWidget {
@@ -20,7 +22,7 @@ class NoticesScreen extends StatelessWidget {
         return _NoticeListItem(
           notice: notices[index],
           onTap: () => context.push(
-            '/home/notices/${notices[index].id}',
+            HomePath.noticeDetail(notices[index].id),
             extra: notices[index],
           ),
         );
@@ -37,10 +39,12 @@ class _NoticeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: rs.pxy(horizontal: 24, vertical: 20),
         child: Row(
           children: [
             Expanded(
@@ -51,7 +55,7 @@ class _NoticeListItem extends StatelessWidget {
                     children: [
                       if (notice.isNew) ...[
                         const NewBadge(),
-                        const SizedBox(width: 8),
+                        SizedBox(width: rs.w(8)),
                       ],
                       Flexible(
                         child: Text(
@@ -62,23 +66,23 @@ class _NoticeListItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: rs.h(6)),
                   Text(
                     notice.description,
                     style: AppTextStyles.subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: rs.h(4)),
                   Text(notice.date, style: AppTextStyles.caption),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            const Icon(
+            SizedBox(width: rs.w(8)),
+            Icon(
               Icons.chevron_right,
               color: AppColors.textSecondary,
-              size: 24,
+              size: rs.w(24),
             ),
           ],
         ),

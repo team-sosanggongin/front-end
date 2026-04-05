@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/app_logo.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) context.go('/login');
+        if (mounted) context.go(AuthPath.login);
       });
     }
   }
@@ -30,16 +32,16 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightGray,
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
-            AppLogo(),
-            Spacer(),
+            const Spacer(),
+            const AppLogo(),
+            const Spacer(),
             Padding(
-              padding: EdgeInsets.only(bottom: 48),
-              child: _LoadingDots(),
+              padding: EdgeInsets.only(bottom: ResponsiveSize.of(context).h(48)),
+              child: const _LoadingDots(),
             ),
           ],
         ),
@@ -79,6 +81,7 @@ class _LoadingDotsState extends State<_LoadingDots>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) {
+        final rs = ResponsiveSize.of(context);
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(3, (index) {
@@ -86,9 +89,9 @@ class _LoadingDotsState extends State<_LoadingDots>
             final opacity =
                 (((_controller.value - delay) % 1.0) < 0.5) ? 1.0 : 0.3;
             return Container(
-              width: 8,
-              height: 8,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: rs.w(8),
+              height: rs.w(8),
+              margin: EdgeInsets.symmetric(horizontal: rs.w(4)),
               decoration: BoxDecoration(
                 color: AppColors.textSecondary.withValues(alpha: opacity),
                 shape: BoxShape.circle,

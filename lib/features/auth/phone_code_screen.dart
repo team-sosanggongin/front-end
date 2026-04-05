@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/auth_page_layout.dart';
+import '../../core/router/route_path.dart';
 import '../../common/widgets/code_input_box.dart';
 import '../../common/widgets/primary_button.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
 
 class PhoneCodeScreen extends StatefulWidget {
   final String phoneNumber;
@@ -85,7 +88,7 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
   Future<void> _verifyCode(String code) async {
     // TODO: 실제 API 호출로 대체
     if (code == '000000') {
-      context.go('/home');
+      context.push(ConsentPath.salary);
     } else {
       setState(() {
         _hasError = true;
@@ -101,11 +104,14 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+    final l = S.of(context);
+
     return AuthPageLayout(
-      title: '인증번호 확인',
-      subtitle: '휴대폰으로 전송된 6자리 번호를 입력해주세요',
+      title: l.verifyAuthCodeTitle,
+      subtitle: l.verifyAuthCodeSubtitle,
       bottomButton: PrimaryButton(
-        text: '확인',
+        text: l.confirmButton,
         enabled: _isFilled,
         onPressed: _verify,
       ),
@@ -118,19 +124,19 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
             hasError: _hasError,
           ),
           if (_hasError)
-            const Padding(
-              padding: EdgeInsets.only(top: 12),
+            Padding(
+              padding: EdgeInsets.only(top: rs.h(12)),
               child: Text(
-                '인증번호가 올바르지 않습니다. 다시 확인해주세요',
+                l.invalidAuthCodeError,
                 style: AppTextStyles.errorText,
               ),
             ),
-          const SizedBox(height: 24),
+          SizedBox(height: rs.h(24)),
           Text(_formattedTime, style: AppTextStyles.timer),
-          const SizedBox(height: 8),
+          SizedBox(height: rs.h(8)),
           GestureDetector(
             onTap: _resendCode,
-            child: const Text('인증번호 재발송', style: AppTextStyles.link),
+            child: Text(l.resendAuthCodeButton, style: AppTextStyles.link),
           ),
         ],
       ),

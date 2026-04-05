@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class AppLogo extends StatelessWidget {
   final double size;
@@ -24,8 +25,8 @@ class AppLogo extends StatelessWidget {
             color: AppColors.white,
           ),
         ),
-        const SizedBox(height: 16),
-        const Text('소상공인', style: AppTextStyles.logoTitle),
+        SizedBox(height: size * 0.13),
+        Text(S.of(context).appTitle, style: AppTextStyles.logoTitle),
       ],
     );
   }

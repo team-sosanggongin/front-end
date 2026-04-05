@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/router.dart';
 import 'core/theme/app_theme.dart';
+import 'l10n/app_localizations.dart';
 import 'services/notification/notification_providers.dart';
 import 'utils/env_config.dart';
 import 'core/env/firebase_options.dart';
@@ -40,6 +41,10 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'platform',
       theme: AppTheme.light,
       routerConfig: router,
+      localizationsDelegates: S.localizationsDelegates,
+      supportedLocales: S.supportedLocales,
+      //국제화시 변경 구조만잡고 영어만 예시로 만들어봄 영어전환시'en'테스트 확인 완료
+      locale: const Locale('en'),
     );
   }
 }

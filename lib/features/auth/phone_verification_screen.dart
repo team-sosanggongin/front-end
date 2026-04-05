@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/widgets/auth_page_layout.dart';
+import '../../core/router/route_path.dart';
 import '../../common/widgets/primary_button.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
 
 class PhoneVerificationScreen extends StatefulWidget {
   const PhoneVerificationScreen({super.key});
@@ -38,19 +41,23 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
   void _requestCode() {
     final phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    context.push('/phone-code', extra: phone);
+    context.push(AuthPath.phoneCode, extra: phone);
   }
 
   @override
   Widget build(BuildContext context) {
+    final rs = ResponsiveSize.of(context);
+
+    final l = S.of(context);
+
     return AuthPageLayout(
-      title: '휴대폰 인증',
-      subtitle: '안전한 서비스 이용을 위해 본인 인증을 진행합니다',
+      title: l.phoneVerificationTitle,
+      subtitle: l.phoneVerificationSubtitle,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('휴대폰 번호', style: AppTextStyles.label),
-          const SizedBox(height: 8),
+          Text(l.phoneNumberLabel, style: AppTextStyles.label),
+          SizedBox(height: rs.h(8)),
           TextField(
             controller: _phoneController,
             keyboardType: TextInputType.phone,
@@ -60,12 +67,12 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
             ],
             style: AppTextStyles.body,
             decoration: AppInputDecorations.outlined(
-              hintText: '01012345678',
+              hintText: l.phoneNumberHint,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: rs.h(16)),
           PrimaryButton(
-            text: '인증번호 받기',
+            text: l.getAuthCodeButton,
             enabled: _isValid,
             onPressed: _requestCode,
           ),

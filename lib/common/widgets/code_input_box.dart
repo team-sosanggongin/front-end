@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
 
 class CodeInputBox extends StatefulWidget {
   final int length;
@@ -78,51 +79,62 @@ class CodeInputBoxState extends State<CodeInputBox> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final boxSize = ((screenWidth - 48 - (widget.length - 1) * 12) / widget.length)
-        .clamp(48.0, 64.0);
+    final rs = ResponsiveSize.of(context);
+    final boxRadius = rs.radius(12);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(widget.length, (index) {
-        return Container(
-          width: boxSize,
-          height: boxSize,
-          margin: EdgeInsets.symmetric(horizontal: index == 0 || index == widget.length - 1 ? 0 : 6),
-          child: KeyboardListener(
-            focusNode: FocusNode(),
-            onKeyEvent: (event) => _onKey(index, event),
-            child: TextField(
-              controller: _controllers[index],
-              focusNode: _focusNodes[index],
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              maxLength: 1,
-              style: AppTextStyles.codeInput,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                counterText: '',
-                contentPadding: EdgeInsets.zero,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: widget.hasError ? AppColors.error : AppColors.borderGray,
-                    width: widget.hasError ? 1.5 : 1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: widget.hasError ? AppColors.error : AppColors.dark,
-                    width: 1.5,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
+        final gap = rs.w(6);
+        final totalGap = (widget.length - 1) * gap;
+        final boxSize = ((availableWidth - totalGap) / widget.length)
+            .clamp(rs.w(40), rs.w(64));
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(widget.length, (index) {
+            return Padding(
+              padding: EdgeInsets.only(left: index == 0 ? 0 : gap),
+              child: SizedBox(
+                width: boxSize,
+                height: boxSize,
+                child: KeyboardListener(
+                  focusNode: FocusNode(),
+                  onKeyEvent: (event) => _onKey(index, event),
+                  child: TextField(
+                    controller: _controllers[index],
+                    focusNode: _focusNodes[index],
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    maxLength: 1,
+                    style: AppTextStyles.codeInput,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: InputDecoration(
+                      counterText: '',
+                      contentPadding: EdgeInsets.zero,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: boxRadius,
+                        borderSide: BorderSide(
+                          color: widget.hasError ? AppColors.error : AppColors.borderGray,
+                          width: widget.hasError ? 1.5 : 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: boxRadius,
+                        borderSide: BorderSide(
+                          color: widget.hasError ? AppColors.error : AppColors.dark,
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) => _onChanged(index, value),
                   ),
                 ),
               ),
-              onChanged: (value) => _onChanged(index, value),
-            ),
-          ),
+            );
+          }),
         );
-      }),
+      },
     );
   }
 }
