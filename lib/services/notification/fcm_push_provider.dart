@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:platform/utils/env_config.dart';
+import 'package:sosangongin_platform/utils/env_config.dart';
 import 'push_provider.dart';
 
 class FcmPushProvider implements PushProvider {

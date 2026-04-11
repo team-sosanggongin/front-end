@@ -558,6 +558,78 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'NEW'**
   String get newBadge;
+
+  /// No description provided for @maintenanceDialogTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'서비스 점검 중'**
+  String get maintenanceDialogTitle;
+
+  /// No description provided for @maintenanceStartLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'시작'**
+  String get maintenanceStartLabel;
+
+  /// No description provided for @maintenanceEndLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'종료'**
+  String get maintenanceEndLabel;
+
+  /// No description provided for @forceUpdateDialogTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'업데이트 필요'**
+  String get forceUpdateDialogTitle;
+
+  /// No description provided for @forceUpdateDialogMessage.
+  ///
+  /// In ko, this message translates to:
+  /// **'서비스 이용을 위해 최신 버전으로 업데이트해 주세요.'**
+  String get forceUpdateDialogMessage;
+
+  /// No description provided for @optionalUpdateDialogTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'새 버전 안내'**
+  String get optionalUpdateDialogTitle;
+
+  /// No description provided for @optionalUpdateDialogMessage.
+  ///
+  /// In ko, this message translates to:
+  /// **'더 나은 서비스를 위해 업데이트를 권장합니다.'**
+  String get optionalUpdateDialogMessage;
+
+  /// No description provided for @updateDialogLatestVersion.
+  ///
+  /// In ko, this message translates to:
+  /// **'최신 버전: {version}'**
+  String updateDialogLatestVersion(String version);
+
+  /// No description provided for @updateButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'업데이트'**
+  String get updateButton;
+
+  /// No description provided for @loginFailError.
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인에 실패했습니다. 다시 시도해 주세요.'**
+  String get loginFailError;
+
+  /// No description provided for @networkError.
+  ///
+  /// In ko, this message translates to:
+  /// **'네트워크 오류가 발생했습니다.'**
+  String get networkError;
+
+  /// No description provided for @retryButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get retryButton;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

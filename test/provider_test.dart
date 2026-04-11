@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:platform/features/my/user_provider.dart';
+import 'package:sosangongin_platform/features/my/user_provider.dart';
 
 void main() {
   // UserProvider test

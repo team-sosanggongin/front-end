@@ -241,4 +241,42 @@ class SKo extends S {
 
   @override
   String get newBadge => 'NEW';
+
+  @override
+  String get maintenanceDialogTitle => '서비스 점검 중';
+
+  @override
+  String get maintenanceStartLabel => '시작';
+
+  @override
+  String get maintenanceEndLabel => '종료';
+
+  @override
+  String get forceUpdateDialogTitle => '업데이트 필요';
+
+  @override
+  String get forceUpdateDialogMessage => '서비스 이용을 위해 최신 버전으로 업데이트해 주세요.';
+
+  @override
+  String get optionalUpdateDialogTitle => '새 버전 안내';
+
+  @override
+  String get optionalUpdateDialogMessage => '더 나은 서비스를 위해 업데이트를 권장합니다.';
+
+  @override
+  String updateDialogLatestVersion(String version) {
+    return '최신 버전: $version';
+  }
+
+  @override
+  String get updateButton => '업데이트';
+
+  @override
+  String get loginFailError => '로그인에 실패했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get networkError => '네트워크 오류가 발생했습니다.';
+
+  @override
+  String get retryButton => '다시 시도';
 }

@@ -46,7 +46,7 @@ Environment is set manually in `main.dart`. When `AppEnv.local`, `DeviceTokenSer
 
 ## Key Conventions
 
-- Package name: `platform` (imports use `package:platform/...`)
+- Package name: `platform` (imports use `package:sosangongin_platform/...`)
 - Android namespace: `com.example.platform`
 - Dart SDK: `^3.11.1`
 - Generated files (`*.g.dart`, `*.freezed.dart`) are gitignored — run `build_runner` after changing annotated code

@@ -90,5 +90,23 @@
 
   "phoneNumberHint": "01012345678",
 
-  "newBadge": "NEW"
+  "newBadge": "NEW",
+
+   "maintenanceDialogTitle": "Under Maintenance",
+    "maintenanceStartLabel": "Start",
+    "maintenanceEndLabel": "End",
+    "forceUpdateDialogTitle": "Update Required",
+    "forceUpdateDialogMessage": "Please update to the latest version to continue.",
+    "optionalUpdateDialogTitle": "New Version Available",
+    "optionalUpdateDialogMessage": "We recommend updating for a better experience.",
+    "updateDialogLatestVersion": "Latest version: {version}",
+    "@updateDialogLatestVersion": {
+      "placeholders": {
+        "version": { "type": "String" }
+      }
+    },
+    "updateButton": "Update",
+    "loginFailError": "Login failed. Please try again.",
+    "networkError": "A network error has occurred.",
+    "retryButton": "Retry"
 }

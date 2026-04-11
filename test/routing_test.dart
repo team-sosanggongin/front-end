@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:platform/l10n/app_localizations.dart';
-import 'package:platform/features/auth/login_screen.dart';
-import 'package:platform/features/auth/phone_verification_screen.dart';
-import 'package:platform/features/auth/phone_code_screen.dart';
-import 'package:platform/features/splash/splash_screen.dart';
-import 'package:platform/features/home/home_screen.dart';
-import 'package:platform/features/home/notices_screen.dart';
-import 'package:platform/features/home/notice_detail_screen.dart';
-import 'package:platform/features/home/models/notice.dart';
-import 'package:platform/features/consent/privacy_consent_screen.dart';
-import 'package:platform/features/consent/salary_consent_screen.dart';
-import 'package:platform/features/account/account_verification_screen.dart';
+import 'package:sosangongin_platform/l10n/app_localizations.dart';
+import 'package:sosangongin_platform/features/auth/login_screen.dart';
+import 'package:sosangongin_platform/features/auth/phone_verification_screen.dart';
+import 'package:sosangongin_platform/features/auth/phone_code_screen.dart';
+import 'package:sosangongin_platform/features/splash/splash_screen.dart';
+import 'package:sosangongin_platform/features/home/home_screen.dart';
+import 'package:sosangongin_platform/features/home/notices_screen.dart';
+import 'package:sosangongin_platform/features/home/notice_detail_screen.dart';
+import 'package:sosangongin_platform/features/home/models/notice.dart';
+import 'package:sosangongin_platform/features/consent/privacy_consent_screen.dart';
+import 'package:sosangongin_platform/features/consent/salary_consent_screen.dart';
+import 'package:sosangongin_platform/features/account/account_verification_screen.dart';
 
 // router test
 // ─── 헬퍼 ────────────────────────────────────────────────

@@ -259,4 +259,44 @@ class SEn extends S {
 
   @override
   String get newBadge => 'NEW';
+
+  @override
+  String get maintenanceDialogTitle => 'Under Maintenance';
+
+  @override
+  String get maintenanceStartLabel => 'Start';
+
+  @override
+  String get maintenanceEndLabel => 'End';
+
+  @override
+  String get forceUpdateDialogTitle => 'Update Required';
+
+  @override
+  String get forceUpdateDialogMessage =>
+      'Please update to the latest version to continue.';
+
+  @override
+  String get optionalUpdateDialogTitle => 'New Version Available';
+
+  @override
+  String get optionalUpdateDialogMessage =>
+      'We recommend updating for a better experience.';
+
+  @override
+  String updateDialogLatestVersion(String version) {
+    return 'Latest version: $version';
+  }
+
+  @override
+  String get updateButton => 'Update';
+
+  @override
+  String get loginFailError => 'Login failed. Please try again.';
+
+  @override
+  String get networkError => 'A network error has occurred.';
+
+  @override
+  String get retryButton => 'Retry';
 }

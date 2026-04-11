@@ -90,5 +90,23 @@
 
   "phoneNumberHint": "01012345678",
 
-  "newBadge": "NEW"
+  "newBadge": "NEW",
+
+  "maintenanceDialogTitle": "서비스 점검 중",
+    "maintenanceStartLabel": "시작",
+    "maintenanceEndLabel": "종료",
+    "forceUpdateDialogTitle": "업데이트 필요",
+    "forceUpdateDialogMessage": "서비스 이용을 위해 최신 버전으로 업데이트해 주세요.",
+    "optionalUpdateDialogTitle": "새 버전 안내",
+    "optionalUpdateDialogMessage": "더 나은 서비스를 위해 업데이트를 권장합니다.",
+    "updateDialogLatestVersion": "최신 버전: {version}",
+    "@updateDialogLatestVersion": {
+      "placeholders": {
+        "version": { "type": "String" }
+      }
+    },
+    "updateButton": "업데이트",
+    "loginFailError": "로그인에 실패했습니다. 다시 시도해 주세요.",
+    "networkError": "네트워크 오류가 발생했습니다.",
+    "retryButton": "다시 시도"
 }

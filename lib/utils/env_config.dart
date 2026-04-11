@@ -29,6 +29,13 @@ class EnvConfig {
     return const String.fromEnvironment('BASE_URL');
   }
 
+  /// 카카오 네이티브 앱키
+  static String get kakaoNativeAppKey {
+    return const String.fromEnvironment('KAKAO_NATIVE_APP_KEY');
+  }
+
   /// 현재 환경이 Mock 모드인지 확인
   static bool get isMock => defaultEnv == AppEnv.local;
 }
+
+
