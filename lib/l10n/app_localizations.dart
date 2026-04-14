@@ -97,12 +97,6 @@ abstract class S {
     Locale('ko'),
   ];
 
-  /// No description provided for @appTitle.
-  ///
-  /// In ko, this message translates to:
-  /// **'소상공인'**
-  String get appTitle;
-
   /// No description provided for @kakaoLoginButton.
   ///
   /// In ko, this message translates to:
@@ -114,6 +108,12 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'카카오계정으로 시작하기'**
   String get startWithKakao;
+
+  /// No description provided for @loginFailError.
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인에 실패했습니다. 다시 시도해 주세요.'**
+  String get loginFailError;
 
   /// No description provided for @phoneVerificationTitle.
   ///
@@ -133,6 +133,12 @@ abstract class S {
   /// **'휴대폰 번호'**
   String get phoneNumberLabel;
 
+  /// No description provided for @phoneNumberHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'01012345678'**
+  String get phoneNumberHint;
+
   /// No description provided for @getAuthCodeButton.
   ///
   /// In ko, this message translates to:
@@ -150,12 +156,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'휴대폰으로 전송된 6자리 번호를 입력해주세요'**
   String get verifyAuthCodeSubtitle;
-
-  /// No description provided for @confirmButton.
-  ///
-  /// In ko, this message translates to:
-  /// **'확인'**
-  String get confirmButton;
 
   /// No description provided for @invalidAuthCodeError.
   ///
@@ -385,18 +385,6 @@ abstract class S {
   /// **'급여 관련 정보는 관련 법령에 따라 다음과 같이 보관됩니다.'**
   String get salarySection3Content;
 
-  /// No description provided for @agreeButton.
-  ///
-  /// In ko, this message translates to:
-  /// **'위 내용에 동의합니다'**
-  String get agreeButton;
-
-  /// No description provided for @skipButton.
-  ///
-  /// In ko, this message translates to:
-  /// **'나중에 하기'**
-  String get skipButton;
-
   /// No description provided for @enterAccountInfoTitle.
   ///
   /// In ko, this message translates to:
@@ -432,6 +420,18 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'\'-\' 없이 숫자만 입력'**
   String get accountNumberHint;
+
+  /// No description provided for @accountAliasLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'계좌 별칭'**
+  String get accountAliasLabel;
+
+  /// No description provided for @accountAliasHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'예) 급여계좌, 생활비계좌'**
+  String get accountAliasHint;
 
   /// No description provided for @noticeLabel.
   ///
@@ -475,12 +475,6 @@ abstract class S {
   /// **'해당 계좌를 삭제하시겠습니까?'**
   String get deleteAccountConfirmation;
 
-  /// No description provided for @cancelButton.
-  ///
-  /// In ko, this message translates to:
-  /// **'취소'**
-  String get cancelButton;
-
   /// No description provided for @deleteButton.
   ///
   /// In ko, this message translates to:
@@ -498,6 +492,18 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'예금주'**
   String get accountHolderLabel;
+
+  /// No description provided for @accountInfoHeaderTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'계좌 정보'**
+  String get accountInfoHeaderTitle;
+
+  /// No description provided for @accountInfoMenuLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'계좌 정보'**
+  String get accountInfoMenuLabel;
 
   /// No description provided for @homeBannerTitle.
   ///
@@ -523,12 +529,6 @@ abstract class S {
   /// **'공지사항'**
   String get noticesHeaderTitle;
 
-  /// No description provided for @accountInfoHeaderTitle.
-  ///
-  /// In ko, this message translates to:
-  /// **'계좌 정보'**
-  String get accountInfoHeaderTitle;
-
   /// No description provided for @myPageHeaderTitle.
   ///
   /// In ko, this message translates to:
@@ -541,23 +541,53 @@ abstract class S {
   /// **'프로필 보기'**
   String get viewProfileLink;
 
-  /// No description provided for @accountInfoMenuLabel.
+  /// No description provided for @appTitle.
   ///
   /// In ko, this message translates to:
-  /// **'계좌 정보'**
-  String get accountInfoMenuLabel;
+  /// **'소상공인'**
+  String get appTitle;
 
-  /// No description provided for @phoneNumberHint.
+  /// No description provided for @confirmButton.
   ///
   /// In ko, this message translates to:
-  /// **'01012345678'**
-  String get phoneNumberHint;
+  /// **'확인'**
+  String get confirmButton;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'취소'**
+  String get cancelButton;
+
+  /// No description provided for @skipButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'나중에 하기'**
+  String get skipButton;
+
+  /// No description provided for @agreeButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'위 내용에 동의합니다'**
+  String get agreeButton;
 
   /// No description provided for @newBadge.
   ///
   /// In ko, this message translates to:
   /// **'NEW'**
   String get newBadge;
+
+  /// No description provided for @networkError.
+  ///
+  /// In ko, this message translates to:
+  /// **'네트워크 오류가 발생했습니다.'**
+  String get networkError;
+
+  /// No description provided for @retryButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시도'**
+  String get retryButton;
 
   /// No description provided for @maintenanceDialogTitle.
   ///
@@ -612,24 +642,6 @@ abstract class S {
   /// In ko, this message translates to:
   /// **'업데이트'**
   String get updateButton;
-
-  /// No description provided for @loginFailError.
-  ///
-  /// In ko, this message translates to:
-  /// **'로그인에 실패했습니다. 다시 시도해 주세요.'**
-  String get loginFailError;
-
-  /// No description provided for @networkError.
-  ///
-  /// In ko, this message translates to:
-  /// **'네트워크 오류가 발생했습니다.'**
-  String get networkError;
-
-  /// No description provided for @retryButton.
-  ///
-  /// In ko, this message translates to:
-  /// **'다시 시도'**
-  String get retryButton;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

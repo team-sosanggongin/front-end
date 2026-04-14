@@ -1,0 +1,18 @@
+{
+  "@@locale": "en",
+
+  "kakaoLoginButton": "Kakao Login",
+  "startWithKakao": "Start with Kakao account",
+  "loginFailError": "Login failed. Please try again.",
+
+  "phoneVerificationTitle": "Phone Verification",
+  "phoneVerificationSubtitle": "Please verify your identity for safe service use",
+  "phoneNumberLabel": "Phone number",
+  "phoneNumberHint": "01012345678",
+  "getAuthCodeButton": "Get verification code",
+
+  "verifyAuthCodeTitle": "Verify Code",
+  "verifyAuthCodeSubtitle": "Enter the 6-digit code sent to your phone",
+  "invalidAuthCodeError": "Invalid verification code. Please try again.",
+  "resendAuthCodeButton": "Resend code"
+}

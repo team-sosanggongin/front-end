@@ -11,12 +11,12 @@ import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
-import '../app/application/app_controller.dart';
-import '../auth/application/auth_controller.dart';
+import '../app/app_provider.dart';
+import '../auth/auth_provider.dart';
 
-// TODO: 실제 스토어 URL로 교체
+// TODO : 추후 실제스토어URL
 const _androidStoreUrl =
-    'https://play.google.com/store/apps/details?id=com.yourcompany.app';
+    'https://play.google.com/store/apps/details?id=com.sosanggongin.app';
 const _iosStoreUrl = 'https://apps.apple.com/app/idXXXXXXXXX';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -47,10 +47,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     switch (result) {
       case AppCheckOk():
-      // 토큰 유무에 따라 홈 or 로그인 분기
-        final hasToken = await ref
-            .read(authControllerProvider.notifier)
-            .hasValidToken();
+        final hasToken =
+        await ref.read(authProvider.notifier).hasValidToken();
         if (!mounted) return;
         context.go(hasToken ? HomePath.root : AuthPath.login);
 
@@ -84,20 +82,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<AppCheckResult>>(
-      appControllerProvider,
-          (_, next) {
-        next.whenData((result) {
-          if (_delayDone) {
-            _handleResult(result);
-          } else {
-            _pendingResult = result;
-          }
-        });
-      },
-    );
+    ref.listen<AsyncValue<AppCheckResult>>(appCheckProvider, (_, next) {
+      next.whenData((result) {
+        if (_delayDone) {
+          _handleResult(result);
+        } else {
+          _pendingResult = result;
+        }
+      });
+    });
 
-    final state = ref.watch(appControllerProvider);
+    final state = ref.watch(appCheckProvider);
 
     return Scaffold(
       backgroundColor: AppColors.lightGray,
@@ -108,7 +103,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             _handled = false;
             _delayDone = false;
             _pendingResult = null;
-            ref.read(appControllerProvider.notifier).retry();
+            ref.read(appCheckProvider.notifier).retry();
             Future.delayed(const Duration(seconds: 2), () {
               if (!mounted) return;
               _delayDone = true;
@@ -135,17 +130,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 }
 
-//에러
-
 class _ErrorView extends StatelessWidget {
   const _ErrorView({required this.onRetry});
-
   final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     final rs = ResponsiveSize.of(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -159,7 +150,6 @@ class _ErrorView extends StatelessWidget {
     );
   }
 }
-
 
 class _LoadingDots extends StatefulWidget {
   const _LoadingDots();

@@ -7,8 +7,7 @@ import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
-import 'application/auth_controller.dart';
-import 'domain/auth_repository.dart';
+import 'auth_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -16,9 +15,9 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rs = ResponsiveSize.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
 
-    ref.listen<AuthState>(authControllerProvider, (_, next) {
+    ref.listen<AuthState>(authProvider, (_, next) {
       switch (next) {
         case AuthStateSuccess(:final result):
           switch (result) {
@@ -31,12 +30,14 @@ class LoginScreen extends ConsumerWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(S.of(context).loginFailError)),
           );
-          ref.read(authControllerProvider.notifier).resetState();
+          ref.read(authProvider.notifier).resetState();
         case AuthStateIdle():
         case AuthStateLoading():
           break;
       }
     });
+
+    final isLoading = authState is AuthStateLoading;
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -50,12 +51,10 @@ class LoginScreen extends ConsumerWidget {
                 const AppLogo(),
                 const Spacer(flex: 2),
                 _KakaoLoginButton(
-                  isLoading: authState is AuthStateLoading,
-                  onPressed: authState is AuthStateLoading
+                  isLoading: isLoading,
+                  onPressed: isLoading
                       ? null
-                      : () => ref
-                      .read(authControllerProvider.notifier)
-                      .loginWithKakao(),
+                      : () => ref.read(authProvider.notifier).loginWithKakao(),
                 ),
                 SizedBox(height: rs.h(12)),
                 Text(
@@ -73,10 +72,7 @@ class LoginScreen extends ConsumerWidget {
 }
 
 class _KakaoLoginButton extends StatelessWidget {
-  const _KakaoLoginButton({
-    required this.onPressed,
-    required this.isLoading,
-  });
+  const _KakaoLoginButton({required this.onPressed, required this.isLoading});
 
   final VoidCallback? onPressed;
   final bool isLoading;
@@ -99,11 +95,8 @@ class _KakaoLoginButton extends StatelessWidget {
             color: Color(0xFF3C1E1E),
           ),
         )
-            : Icon(
-          Icons.chat_bubble,
-          color: const Color(0xFF3C1E1E),
-          size: rs.w(20),
-        ),
+            : Icon(Icons.chat_bubble,
+            color: const Color(0xFF3C1E1E), size: rs.w(20)),
         label: Text(
           S.of(context).kakaoLoginButton,
           style: TextStyle(

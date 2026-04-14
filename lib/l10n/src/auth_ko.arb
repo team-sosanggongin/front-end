@@ -1,0 +1,18 @@
+{
+  "@@locale": "ko",
+
+  "kakaoLoginButton": "카카오 로그인",
+  "startWithKakao": "카카오계정으로 시작하기",
+  "loginFailError": "로그인에 실패했습니다. 다시 시도해 주세요.",
+
+  "phoneVerificationTitle": "휴대폰 인증",
+  "phoneVerificationSubtitle": "안전한 서비스 이용을 위해 본인 인증을 진행합니다",
+  "phoneNumberLabel": "휴대폰 번호",
+  "phoneNumberHint": "01012345678",
+  "getAuthCodeButton": "인증번호 받기",
+
+  "verifyAuthCodeTitle": "인증번호 확인",
+  "verifyAuthCodeSubtitle": "휴대폰으로 전송된 6자리 번호를 입력해주세요",
+  "invalidAuthCodeError": "인증번호가 올바르지 않습니다. 다시 확인해주세요",
+  "resendAuthCodeButton": "인증번호 재발송"
+}

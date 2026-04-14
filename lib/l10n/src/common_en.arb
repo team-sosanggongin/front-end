@@ -1,0 +1,27 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Small Biz",
+  "confirmButton": "Confirm",
+  "cancelButton": "Cancel",
+  "skipButton": "Skip for now",
+  "agreeButton": "I agree to the above",
+  "newBadge": "NEW",
+  "networkError": "A network error has occurred.",
+  "retryButton": "Retry",
+
+  "maintenanceDialogTitle": "Under Maintenance",
+  "maintenanceStartLabel": "Start",
+  "maintenanceEndLabel": "End",
+  "forceUpdateDialogTitle": "Update Required",
+  "forceUpdateDialogMessage": "Please update to the latest version to continue.",
+  "optionalUpdateDialogTitle": "New Version Available",
+  "optionalUpdateDialogMessage": "We recommend updating for a better experience.",
+  "updateDialogLatestVersion": "Latest version: {version}",
+  "@updateDialogLatestVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "updateButton": "Update"
+}

@@ -124,14 +124,14 @@ class _AccountCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TagBadge(label: account.type),
+          TagBadge(label: account.accountAlias),
           SizedBox(height: rs.h(12)),
           _buildInfoRow(context, S.of(context).bankLabel, account.bankName,
               valueStyle: AppTextStyles.titleMedium),
           SizedBox(height: rs.h(10)),
           _buildInfoRow(context, S.of(context).accountNumberLabel, account.accountNumber),
           SizedBox(height: rs.h(10)),
-          _buildInfoRow(context, S.of(context).accountHolderLabel, account.accountHolder),
+          _buildInfoRow(context, S.of(context).accountHolderLabel, account.accountAlias),
           SizedBox(height: rs.h(16)),
           _buildActions(context),
         ],
