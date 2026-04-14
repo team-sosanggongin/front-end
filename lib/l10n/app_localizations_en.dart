@@ -252,6 +252,9 @@ class SEn extends S {
   String get viewProfileLink => 'View profile';
 
   @override
+  String get noNotices => 'No notices available.';
+
+  @override
   String get appTitle => 'Small Biz';
 
   @override

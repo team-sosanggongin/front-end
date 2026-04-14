@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../common/widgets/user_avatar.dart';
 import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
@@ -13,8 +14,7 @@ class MyPageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: API 연결 시 setUser() 호출로 교체
-    // 현재는  mock 유저
+    // Todo: Mock: 임시 유저, 실제: auth 후 userProvider에 setUser() 호출
     final user = ref.watch(userProvider) ??
         const UserModel(id: 'mock_001', name: '홍길동');
 
@@ -72,7 +72,10 @@ class MyPageScreen extends ConsumerWidget {
         padding: rs.pxy(horizontal: 24, vertical: 20),
         child: Row(
           children: [
-            Expanded(child: Text(S.of(context).accountInfoMenuLabel, style: AppTextStyles.body)),
+            Expanded(
+              child: Text(S.of(context).accountInfoMenuLabel,
+                  style: AppTextStyles.body),
+            ),
             Icon(Icons.chevron_right,
                 color: AppColors.textSecondary, size: rs.w(24)),
           ],

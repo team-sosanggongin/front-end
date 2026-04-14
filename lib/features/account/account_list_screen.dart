@@ -1,28 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../common/widgets/primary_button.dart';
 import '../../common/widgets/tag_badge.dart';
 import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
+import '../consent/consent_provider.dart';
 import '../my/user_provider.dart';
+import 'account_list_provider.dart';
 
 class AccountListScreen extends ConsumerWidget {
   const AccountListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accounts = ref.watch(accountListProvider);
+    final state = ref.watch(accountListProvider);
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(child: _buildList(context, ref, accounts)),
-            _buildAddButton(context),
-          ],
-        ),
+        child: switch (state) {
+          AccountListStateLoading() => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          AccountListStateError(:final message) => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(message, style: AppTextStyles.body),
+                TextButton(
+                  onPressed: () =>
+                      ref.read(accountListProvider.notifier).fetch(),
+                  child: Text(S.of(context).retryButton),
+                ),
+              ],
+            ),
+          ),
+          AccountListStateLoaded(:final accounts) => Column(
+            children: [
+              Expanded(child: _buildList(context, ref, accounts)),
+              _buildAddButton(context),
+            ],
+          ),
+        },
       ),
     );
   }
@@ -46,7 +69,10 @@ class AccountListScreen extends ConsumerWidget {
       separatorBuilder: (_, __) => SizedBox(height: rs.h(16)),
       itemBuilder: (context, index) => _AccountCard(
         account: accounts[index],
-        onDelete: () => _showDeleteDialog(context, ref, accounts[index].id),
+        onDelete: () =>
+            _showDeleteDialog(context, ref, accounts[index].id),
+        onEdit: () =>
+            _showEditDialog(context, ref, accounts[index]),
       ),
     );
   }
@@ -57,7 +83,6 @@ class AccountListScreen extends ConsumerWidget {
     return Padding(
       padding: rs.fromLTRB(24, 0, 24, 24),
       child: OutlinedButton(
-        // 마이페이지에서 계좌 추가 → 급여동의부터 시작 (나중에 하기 버튼 숨김)
         onPressed: () => context.push(ConsentPath.salary, extra: true),
         style: OutlinedButton.styleFrom(
           minimumSize: Size(double.infinity, rs.h(56)),
@@ -68,8 +93,8 @@ class AccountListScreen extends ConsumerWidget {
         ),
         child: Text(
           S.of(context).addAccountButton,
-          style:
-          AppTextStyles.buttonText.copyWith(color: AppColors.darkBackground),
+          style: AppTextStyles.buttonText
+              .copyWith(color: AppColors.darkBackground),
         ),
       ),
     );
@@ -80,8 +105,10 @@ class AccountListScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(S.of(context).deleteAccountTitle, style: AppTextStyles.titleMedium),
-        content: Text(S.of(context).deleteAccountConfirmation, style: AppTextStyles.body),
+        title: Text(S.of(context).deleteAccountTitle,
+            style: AppTextStyles.titleMedium),
+        content: Text(S.of(context).deleteAccountConfirmation,
+            style: AppTextStyles.body),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -91,7 +118,9 @@ class AccountListScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              ref.read(accountListProvider.notifier).removeAccount(accountId);
+              ref
+                  .read(accountListProvider.notifier)
+                  .deleteAccount(accountId);
               Navigator.pop(context);
             },
             child: Text(S.of(context).deleteButton,
@@ -102,13 +131,85 @@ class AccountListScreen extends ConsumerWidget {
       ),
     );
   }
+
+  void _showEditDialog(
+      BuildContext context, WidgetRef ref, AccountModel account) {
+    final bankController =
+    TextEditingController(text: account.bankName);
+    final numberController =
+    TextEditingController(text: account.accountNumber);
+    final aliasController =
+    TextEditingController(text: account.accountAlias);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).changeButton,
+            style: AppTextStyles.titleMedium),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: bankController,
+              decoration: AppInputDecorations.outlined(
+                  hintText: S.of(context).bankLabel),
+              style: AppTextStyles.body,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: numberController,
+              decoration: AppInputDecorations.outlined(
+                  hintText: S.of(context).accountNumberLabel),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              style: AppTextStyles.body,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: aliasController,
+              decoration: AppInputDecorations.outlined(
+                  hintText: S.of(context).accountAliasLabel),
+              style: AppTextStyles.body,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).cancelButton,
+                style: AppTextStyles.label
+                    .copyWith(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              ref.read(accountListProvider.notifier).updateAccount(
+                accountId: account.id,
+                bankName: bankController.text,
+                accountNumber: numberController.text,
+                accountAlias: aliasController.text,
+              );
+              Navigator.pop(context);
+            },
+            child: Text(S.of(context).confirmButton,
+                style: AppTextStyles.label
+                    .copyWith(color: AppColors.dark)),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _AccountCard extends StatelessWidget {
   final AccountModel account;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
-  const _AccountCard({required this.account, required this.onDelete});
+  const _AccountCard({
+    required this.account,
+    required this.onDelete,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +230,8 @@ class _AccountCard extends StatelessWidget {
           _buildInfoRow(context, S.of(context).bankLabel, account.bankName,
               valueStyle: AppTextStyles.titleMedium),
           SizedBox(height: rs.h(10)),
-          _buildInfoRow(context, S.of(context).accountNumberLabel, account.accountNumber),
-          SizedBox(height: rs.h(10)),
-          _buildInfoRow(context, S.of(context).accountHolderLabel, account.accountAlias),
+          _buildInfoRow(context, S.of(context).accountNumberLabel,
+              account.accountNumber),
           SizedBox(height: rs.h(16)),
           _buildActions(context),
         ],
@@ -139,7 +239,8 @@ class _AccountCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, String label, String value, {TextStyle? valueStyle}) {
+  Widget _buildInfoRow(BuildContext context, String label, String value,
+      {TextStyle? valueStyle}) {
     final rs = ResponsiveSize.of(context);
 
     return Column(
@@ -157,28 +258,25 @@ class _AccountCard extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(child: _buildChangeButton(context)),
+        Expanded(child: _buildEditButton(context)),
         SizedBox(width: rs.w(8)),
         Expanded(child: _buildDeleteButton(context)),
       ],
     );
   }
 
-  Widget _buildChangeButton(BuildContext context) {
+  Widget _buildEditButton(BuildContext context) {
     final rs = ResponsiveSize.of(context);
 
     return OutlinedButton(
-      // 변경도 급여동의부터 시작 (fromMyPage: true)
-      onPressed: () => context.push(ConsentPath.salary, extra: true),
+      onPressed: onEdit,
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.borderGray),
-        shape:
-        RoundedRectangleBorder(borderRadius: rs.radius(8)),
+        shape: RoundedRectangleBorder(borderRadius: rs.radius(8)),
         padding: rs.py(10),
       ),
       child: Text(S.of(context).changeButton,
-          style:
-          AppTextStyles.label.copyWith(color: AppColors.textPrimary)),
+          style: AppTextStyles.label.copyWith(color: AppColors.textPrimary)),
     );
   }
 
@@ -189,8 +287,7 @@ class _AccountCard extends StatelessWidget {
       onPressed: onDelete,
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.error),
-        shape:
-        RoundedRectangleBorder(borderRadius: rs.radius(8)),
+        shape: RoundedRectangleBorder(borderRadius: rs.radius(8)),
         padding: rs.py(10),
       ),
       child: Text(S.of(context).deleteButton,

@@ -234,6 +234,9 @@ class SKo extends S {
   String get viewProfileLink => '프로필 보기';
 
   @override
+  String get noNotices => '등록된 공지사항이 없습니다.';
+
+  @override
   String get appTitle => '소상공인';
 
   @override

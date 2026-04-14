@@ -1,32 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../common/widgets/new_badge.dart';
+
 import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
-import 'models/notice.dart';
+import '../../l10n/app_localizations.dart';
+import 'notice_provider.dart';
 
-class NoticesScreen extends StatelessWidget {
+class NoticesScreen extends ConsumerWidget {
   const NoticesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: API 호출로 대체
-    final notices = mockNotices;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(noticeListProvider);
 
-    return ListView.separated(
-      itemCount: notices.length,
-      separatorBuilder: (_, _) =>
-          const Divider(height: 1, color: AppColors.borderGray),
-      itemBuilder: (context, index) {
-        return _NoticeListItem(
+    return state.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(S.of(context).networkError, style: AppTextStyles.body),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () =>
+                  ref.read(noticeListProvider.notifier).fetch(refresh: true),
+              child: Text(S.of(context).retryButton),
+            ),
+          ],
+        ),
+      ),
+      data: (notices) => notices.isEmpty
+          ? Center(
+        child: Text(
+          S.of(context).noNotices,
+          style:
+          AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+        ),
+      )
+          : ListView.separated(
+        itemCount: notices.length,
+        separatorBuilder: (_, __) =>
+        const Divider(height: 1, color: AppColors.borderGray),
+        itemBuilder: (context, index) => _NoticeListItem(
           notice: notices[index],
           onTap: () => context.push(
-            HomePath.noticeDetail(notices[index].id),
+            HomePath.noticeDetail(notices[index].id.toString()),
             extra: notices[index],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -51,30 +75,23 @@ class _NoticeListItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      if (notice.isNew) ...[
-                        const NewBadge(),
-                        SizedBox(width: rs.w(8)),
-                      ],
-                      Flexible(
-                        child: Text(
-                          notice.title,
-                          style: AppTextStyles.titleMedium,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    notice.title,
+                    style: AppTextStyles.titleMedium,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: rs.h(6)),
                   Text(
-                    notice.description,
+                    notice.content,
                     style: AppTextStyles.subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: rs.h(4)),
-                  Text(notice.date, style: AppTextStyles.caption),
+                  Text(
+                    notice.createdAt.substring(0, 10).replaceAll('-', '.'),
+                    style: AppTextStyles.caption,
+                  ),
                 ],
               ),
             ),

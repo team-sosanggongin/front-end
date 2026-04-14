@@ -541,6 +541,12 @@ abstract class S {
   /// **'프로필 보기'**
   String get viewProfileLink;
 
+  /// No description provided for @noNotices.
+  ///
+  /// In ko, this message translates to:
+  /// **'등록된 공지사항이 없습니다.'**
+  String get noNotices;
+
   /// No description provided for @appTitle.
   ///
   /// In ko, this message translates to:

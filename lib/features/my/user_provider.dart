@@ -54,21 +54,3 @@ final userProvider = NotifierProvider<UserNotifier, UserModel?>(
   UserNotifier.new,
 );
 
-
-class AccountListNotifier extends Notifier<List<AccountModel>> {
-  @override
-  List<AccountModel> build() => [];
-
-  void addAccount(AccountModel account) {
-    state = [...state, account];
-  }
-
-  void removeAccount(String accountId) {
-    state = state.where((a) => a.id != accountId).toList();
-  }
-}
-
-final accountListProvider =
-NotifierProvider<AccountListNotifier, List<AccountModel>>(
-  AccountListNotifier.new,
-);

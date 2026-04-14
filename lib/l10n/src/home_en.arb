@@ -1,10 +1,10 @@
 {
   "@@locale": "en",
-
   "homeBannerTitle": "New Education System",
   "homeBannerSubtitle": "Manage employee training more easily",
   "noticesMenuLabel": "Notices",
   "noticesHeaderTitle": "Notices",
   "myPageHeaderTitle": "My Page",
-  "viewProfileLink": "View profile"
+  "viewProfileLink": "View profile",
+  "noNotices": "No notices available."
 }
