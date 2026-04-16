@@ -17,6 +17,7 @@ build/
 
 # 환경변수
 env_local.json
+env_mock.json
 
 ios
 android

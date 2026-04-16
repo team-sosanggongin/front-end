@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../common/widgets/primary_button.dart';
 import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
 import '../consent/consent_provider.dart';
+import 'account_provider.dart';
 
 class AccountVerificationScreen extends ConsumerStatefulWidget {
   const AccountVerificationScreen({super.key});
@@ -22,16 +24,20 @@ class _AccountVerificationScreenState
   String? _selectedBank;
   bool _isDropdownOpen = false;
   final _accountController = TextEditingController();
+  final _aliasController = TextEditingController();
   final _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 
   bool get _canSubmit =>
-      _selectedBank != null && _accountController.text.isNotEmpty;
+      _selectedBank != null &&
+          _accountController.text.isNotEmpty &&
+          _aliasController.text.isNotEmpty;
 
   @override
   void dispose() {
     _removeOverlay();
     _accountController.dispose();
+    _aliasController.dispose();
     super.dispose();
   }
 
@@ -65,6 +71,23 @@ class _AccountVerificationScreenState
   @override
   Widget build(BuildContext context) {
     final banks = ref.watch(bankListProvider);
+    final accountState = ref.watch(accountProvider);
+
+    ref.listen<AccountState>(accountProvider, (_, next) {
+      switch (next) {
+        case AccountStateSuccess():
+          context.go(HomePath.root);
+        case AccountStateError(:final message):
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message)));
+          ref.read(accountProvider.notifier).resetState();
+        case AccountStateIdle():
+        case AccountStateLoading():
+          break;
+      }
+    });
+
+    final isLoading = accountState is AccountStateLoading;
 
     return Scaffold(
       appBar: AppBar(),
@@ -72,7 +95,7 @@ class _AccountVerificationScreenState
         child: Column(
           children: [
             Expanded(child: _buildContent(banks)),
-            _buildBottomButton(),
+            _buildBottomButton(isLoading),
           ],
         ),
       ),
@@ -81,7 +104,6 @@ class _AccountVerificationScreenState
 
   Widget _buildContent(List<String> banks) {
     final rs = ResponsiveSize.of(context);
-
     final l = S.of(context);
 
     return SingleChildScrollView(
@@ -98,6 +120,8 @@ class _AccountVerificationScreenState
           SizedBox(height: rs.h(20)),
           _buildAccountNumberField(),
           SizedBox(height: rs.h(20)),
+          _buildAliasField(),
+          SizedBox(height: rs.h(20)),
           _buildNotice(),
         ],
       ),
@@ -106,7 +130,6 @@ class _AccountVerificationScreenState
 
   Widget _buildBankDropdown(List<String> banks) {
     final rs = ResponsiveSize.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -156,7 +179,6 @@ class _AccountVerificationScreenState
 
   Widget _buildAccountNumberField() {
     final rs = ResponsiveSize.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -168,7 +190,26 @@ class _AccountVerificationScreenState
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           style: AppTextStyles.body,
           onChanged: (_) => setState(() {}),
-          decoration: AppInputDecorations.outlined(hintText: S.of(context).accountNumberHint),
+          decoration: AppInputDecorations.outlined(
+              hintText: S.of(context).accountNumberHint),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAliasField() {
+    final rs = ResponsiveSize.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(S.of(context).accountAliasLabel, style: AppTextStyles.label),
+        SizedBox(height: rs.h(8)),
+        TextField(
+          controller: _aliasController,
+          style: AppTextStyles.body,
+          onChanged: (_) => setState(() {}),
+          decoration: AppInputDecorations.outlined(
+              hintText: S.of(context).accountAliasHint),
         ),
       ],
     );
@@ -176,7 +217,6 @@ class _AccountVerificationScreenState
 
   Widget _buildNotice() {
     final rs = ResponsiveSize.of(context);
-
     return Container(
       width: double.infinity,
       padding: rs.pxy(horizontal: 16, vertical: 16),
@@ -189,24 +229,27 @@ class _AccountVerificationScreenState
         children: [
           Text(S.of(context).noticeLabel, style: AppTextStyles.label),
           SizedBox(height: rs.h(6)),
-          Text(
-            S.of(context).accountRegistrationNotice,
-            style: AppTextStyles.subtitle,
-          ),
+          Text(S.of(context).accountRegistrationNotice,
+              style: AppTextStyles.subtitle),
         ],
       ),
     );
   }
 
-  Widget _buildBottomButton() {
+  Widget _buildBottomButton(bool isLoading) {
     final rs = ResponsiveSize.of(context);
-
     return Padding(
       padding: rs.fromLTRB(24, 0, 24, 24),
       child: PrimaryButton(
         text: S.of(context).registerButton,
-        enabled: _canSubmit,
-        onPressed: _canSubmit ? () => context.go(HomePath.root) : null,
+        enabled: _canSubmit && !isLoading,
+        onPressed: _canSubmit && !isLoading
+            ? () => ref.read(accountProvider.notifier).registerAccount(
+          bankName: _selectedBank!,
+          accountNumber: _accountController.text,
+          accountAlias: _aliasController.text,
+        )
+            : null,
       ),
     );
   }
@@ -215,7 +258,6 @@ class _AccountVerificationScreenState
     return OverlayEntry(
       builder: (context) {
         final rs = ResponsiveSize.of(context);
-
         return Positioned(
           width: rs.screenWidth - rs.w(48),
           child: CompositedTransformFollower(
@@ -250,7 +292,8 @@ class _AccountVerificationScreenState
                           border: isLast
                               ? null
                               : const Border(
-                            bottom: BorderSide(color: AppColors.borderGray),
+                            bottom:
+                            BorderSide(color: AppColors.borderGray),
                           ),
                         ),
                         child: Text(bank, style: AppTextStyles.body),

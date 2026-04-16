@@ -1,22 +1,6 @@
 {
   "@@locale": "en",
 
-  "appTitle": "Small Biz",
-
-  "kakaoLoginButton": "Kakao Login",
-  "startWithKakao": "Start with Kakao account",
-
-  "phoneVerificationTitle": "Phone Verification",
-  "phoneVerificationSubtitle": "Please verify your identity for safe service use",
-  "phoneNumberLabel": "Phone number",
-  "getAuthCodeButton": "Get verification code",
-
-  "verifyAuthCodeTitle": "Verify Code",
-  "verifyAuthCodeSubtitle": "Enter the 6-digit code sent to your phone",
-  "confirmButton": "Confirm",
-  "invalidAuthCodeError": "Invalid verification code. Please try again.",
-  "resendAuthCodeButton": "Resend code",
-
   "privacyConsentTitle": "Privacy Collection & Use Agreement",
   "privacySection1Title": "1. Personal Information Collected",
   "privacySection1Content": "The company collects the following personal information for service provision.",
@@ -53,42 +37,5 @@
   "salaryUseLegalRecord": "Legal record keeping under labor law",
   "salaryUseDispute": "Salary-related dispute resolution",
   "salarySection3Title": "3. Retention Period",
-  "salarySection3Content": "Salary information is retained in accordance with applicable laws.",
-
-  "agreeButton": "I agree to the above",
-  "skipButton": "Skip for now",
-
-  "enterAccountInfoTitle": "Enter account information",
-  "registerAccountSubtitle": "Register the account for salary payment",
-  "bankLabel": "Bank",
-  "selectBankHint": "Select a bank",
-  "accountNumberLabel": "Account number",
-  "accountNumberHint": "Numbers only, no dashes",
-  "noticeLabel": "Notice",
-  "accountRegistrationNotice": "The account will be used only for salary payment. Only accounts in your name can be registered.",
-  "registerButton": "Register",
-
-  "noRegisteredAccounts": "No registered accounts.",
-  "addAccountButton": "+ Add account",
-  "deleteAccountTitle": "Delete Account",
-  "deleteAccountConfirmation": "Are you sure you want to delete this account?",
-  "cancelButton": "Cancel",
-  "deleteButton": "Delete",
-  "changeButton": "Change",
-  "accountHolderLabel": "Account holder",
-
-  "homeBannerTitle": "New Education System",
-  "homeBannerSubtitle": "Manage employee training more easily",
-  "noticesMenuLabel": "Notices",
-
-  "noticesHeaderTitle": "Notices",
-  "accountInfoHeaderTitle": "Account Info",
-  "myPageHeaderTitle": "My Page",
-
-  "viewProfileLink": "View profile",
-  "accountInfoMenuLabel": "Account Info",
-
-  "phoneNumberHint": "01012345678",
-
-  "newBadge": "NEW"
+  "salarySection3Content": "Salary information is retained in accordance with applicable laws."
 }

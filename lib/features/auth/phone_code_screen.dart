@@ -1,24 +1,28 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../common/widgets/auth_page_layout.dart';
-import '../../core/router/route_path.dart';
 import '../../common/widgets/code_input_box.dart';
 import '../../common/widgets/primary_button.dart';
+import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
+import 'auth_provider.dart';
 
-class PhoneCodeScreen extends StatefulWidget {
+class PhoneCodeScreen extends ConsumerStatefulWidget {
   final String phoneNumber;
 
   const PhoneCodeScreen({super.key, required this.phoneNumber});
 
   @override
-  State<PhoneCodeScreen> createState() => _PhoneCodeScreenState();
+  ConsumerState<PhoneCodeScreen> createState() => _PhoneCodeScreenState();
 }
 
-class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
+class _PhoneCodeScreenState extends ConsumerState<PhoneCodeScreen> {
   final _codeKey = GlobalKey<CodeInputBoxState>();
   Timer? _timer;
   int _remainingSeconds = 180;
@@ -40,17 +44,13 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
 
   void _startTimer() {
     _timer?.cancel();
-    setState(() {
-      _remainingSeconds = 180;
-    });
+    setState(() => _remainingSeconds = 180);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingSeconds <= 0) {
         timer.cancel();
         return;
       }
-      setState(() {
-        _remainingSeconds--;
-      });
+      setState(() => _remainingSeconds--);
     });
   }
 
@@ -61,39 +61,8 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
       _isFilled = false;
       _code = '';
     });
+    ref.read(phoneProvider.notifier).requestCode(widget.phoneNumber);
     _startTimer();
-  }
-
-  void _onCodeCompleted(String code) {
-    setState(() {
-      _code = code;
-      _isFilled = true;
-    });
-  }
-
-  void _onCodeChanged() {
-    final state = _codeKey.currentState;
-    setState(() {
-      _hasError = false;
-      _code = state?.code ?? '';
-      _isFilled = state?.isFilled ?? false;
-    });
-  }
-
-  void _verify() {
-    // TODO: API 호출로 인증번호 검증
-    _verifyCode(_code);
-  }
-
-  Future<void> _verifyCode(String code) async {
-    // TODO: 실제 API 호출로 대체
-    if (code == '000000') {
-      context.push(ConsentPath.salary);
-    } else {
-      setState(() {
-        _hasError = true;
-      });
-    }
   }
 
   String get _formattedTime {
@@ -106,36 +75,66 @@ class _PhoneCodeScreenState extends State<PhoneCodeScreen> {
   Widget build(BuildContext context) {
     final rs = ResponsiveSize.of(context);
     final l = S.of(context);
+    final phoneState = ref.watch(phoneProvider);
+
+    ref.listen<PhoneState>(phoneProvider, (_, next) {
+      switch (next) {
+        case PhoneStateSuccess():
+          context.push(ConsentPath.salary);
+          ref.read(phoneProvider.notifier).resetState();
+        case PhoneStateFailed():
+          setState(() => _hasError = true);
+          ref.read(phoneProvider.notifier).resetState();
+        case PhoneStateError(:final message):
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message)));
+          ref.read(phoneProvider.notifier).resetState();
+        default:
+          break;
+      }
+    });
+
+    final isLoading = phoneState is PhoneStateLoading;
 
     return AuthPageLayout(
       title: l.verifyAuthCodeTitle,
       subtitle: l.verifyAuthCodeSubtitle,
       bottomButton: PrimaryButton(
         text: l.confirmButton,
-        enabled: _isFilled,
-        onPressed: _verify,
+        enabled: _isFilled && !isLoading,
+        onPressed: _isFilled && !isLoading
+            ? () => ref.read(phoneProvider.notifier).verifyCode(_code)
+            : null,
       ),
       body: Column(
         children: [
           CodeInputBox(
             key: _codeKey,
-            onCompleted: _onCodeCompleted,
-            onChanged: _onCodeChanged,
+            onCompleted: (code) => setState(() {
+              _code = code;
+              _isFilled = true;
+            }),
+            onChanged: () {
+              final s = _codeKey.currentState;
+              setState(() {
+                _hasError = false;
+                _code = s?.code ?? '';
+                _isFilled = s?.isFilled ?? false;
+              });
+            },
             hasError: _hasError,
           ),
           if (_hasError)
             Padding(
               padding: EdgeInsets.only(top: rs.h(12)),
-              child: Text(
-                l.invalidAuthCodeError,
-                style: AppTextStyles.errorText,
-              ),
+              child: Text(l.invalidAuthCodeError,
+                  style: AppTextStyles.errorText),
             ),
           SizedBox(height: rs.h(24)),
           Text(_formattedTime, style: AppTextStyles.timer),
           SizedBox(height: rs.h(8)),
           GestureDetector(
-            onTap: _resendCode,
+            onTap: isLoading ? null : _resendCode,
             child: Text(l.resendAuthCodeButton, style: AppTextStyles.link),
           ),
         ],

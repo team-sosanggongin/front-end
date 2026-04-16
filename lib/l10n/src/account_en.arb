@@ -1,0 +1,25 @@
+{
+  "@@locale": "en",
+
+  "enterAccountInfoTitle": "Enter account information",
+  "registerAccountSubtitle": "Register the account for salary payment",
+  "bankLabel": "Bank",
+  "selectBankHint": "Select a bank",
+  "accountNumberLabel": "Account number",
+  "accountNumberHint": "Numbers only, no dashes",
+  "accountAliasLabel": "Account Alias",
+  "accountAliasHint": "e.g. Salary account, Living expenses",
+  "noticeLabel": "Notice",
+  "accountRegistrationNotice": "The account will be used only for salary payment. Only accounts in your name can be registered.",
+  "registerButton": "Register",
+
+  "noRegisteredAccounts": "No registered accounts.",
+  "addAccountButton": "+ Add account",
+  "deleteAccountTitle": "Delete Account",
+  "deleteAccountConfirmation": "Are you sure you want to delete this account?",
+  "deleteButton": "Delete",
+  "changeButton": "Change",
+  "accountHolderLabel": "Account holder",
+  "accountInfoHeaderTitle": "Account Info",
+  "accountInfoMenuLabel": "Account Info"
+}

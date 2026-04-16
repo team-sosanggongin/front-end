@@ -9,13 +9,13 @@ class SKo extends S {
   SKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => '소상공인';
-
-  @override
   String get kakaoLoginButton => '카카오 로그인';
 
   @override
   String get startWithKakao => '카카오계정으로 시작하기';
+
+  @override
+  String get loginFailError => '로그인에 실패했습니다. 다시 시도해 주세요.';
 
   @override
   String get phoneVerificationTitle => '휴대폰 인증';
@@ -27,6 +27,9 @@ class SKo extends S {
   String get phoneNumberLabel => '휴대폰 번호';
 
   @override
+  String get phoneNumberHint => '01012345678';
+
+  @override
   String get getAuthCodeButton => '인증번호 받기';
 
   @override
@@ -34,9 +37,6 @@ class SKo extends S {
 
   @override
   String get verifyAuthCodeSubtitle => '휴대폰으로 전송된 6자리 번호를 입력해주세요';
-
-  @override
-  String get confirmButton => '확인';
 
   @override
   String get invalidAuthCodeError => '인증번호가 올바르지 않습니다. 다시 확인해주세요';
@@ -155,12 +155,6 @@ class SKo extends S {
   String get salarySection3Content => '급여 관련 정보는 관련 법령에 따라 다음과 같이 보관됩니다.';
 
   @override
-  String get agreeButton => '위 내용에 동의합니다';
-
-  @override
-  String get skipButton => '나중에 하기';
-
-  @override
   String get enterAccountInfoTitle => '계좌 정보를 입력해 주세요';
 
   @override
@@ -177,6 +171,12 @@ class SKo extends S {
 
   @override
   String get accountNumberHint => '\'-\' 없이 숫자만 입력';
+
+  @override
+  String get accountAliasLabel => '계좌 별칭';
+
+  @override
+  String get accountAliasHint => '예) 급여계좌, 생활비계좌';
 
   @override
   String get noticeLabel => '안내사항';
@@ -201,9 +201,6 @@ class SKo extends S {
   String get deleteAccountConfirmation => '해당 계좌를 삭제하시겠습니까?';
 
   @override
-  String get cancelButton => '취소';
-
-  @override
   String get deleteButton => '삭제';
 
   @override
@@ -211,6 +208,12 @@ class SKo extends S {
 
   @override
   String get accountHolderLabel => '예금주';
+
+  @override
+  String get accountInfoHeaderTitle => '계좌 정보';
+
+  @override
+  String get accountInfoMenuLabel => '계좌 정보';
 
   @override
   String get homeBannerTitle => '새로운 교육 시스템';
@@ -225,20 +228,64 @@ class SKo extends S {
   String get noticesHeaderTitle => '공지사항';
 
   @override
-  String get accountInfoHeaderTitle => '계좌 정보';
-
-  @override
   String get myPageHeaderTitle => '마이페이지';
 
   @override
   String get viewProfileLink => '프로필 보기';
 
   @override
-  String get accountInfoMenuLabel => '계좌 정보';
+  String get noNotices => '등록된 공지사항이 없습니다.';
 
   @override
-  String get phoneNumberHint => '01012345678';
+  String get appTitle => '소상공인';
+
+  @override
+  String get confirmButton => '확인';
+
+  @override
+  String get cancelButton => '취소';
+
+  @override
+  String get skipButton => '나중에 하기';
+
+  @override
+  String get agreeButton => '위 내용에 동의합니다';
 
   @override
   String get newBadge => 'NEW';
+
+  @override
+  String get networkError => '네트워크 오류가 발생했습니다.';
+
+  @override
+  String get retryButton => '다시 시도';
+
+  @override
+  String get maintenanceDialogTitle => '서비스 점검 중';
+
+  @override
+  String get maintenanceStartLabel => '시작';
+
+  @override
+  String get maintenanceEndLabel => '종료';
+
+  @override
+  String get forceUpdateDialogTitle => '업데이트 필요';
+
+  @override
+  String get forceUpdateDialogMessage => '서비스 이용을 위해 최신 버전으로 업데이트해 주세요.';
+
+  @override
+  String get optionalUpdateDialogTitle => '새 버전 안내';
+
+  @override
+  String get optionalUpdateDialogMessage => '더 나은 서비스를 위해 업데이트를 권장합니다.';
+
+  @override
+  String updateDialogLatestVersion(String version) {
+    return '최신 버전: $version';
+  }
+
+  @override
+  String get updateButton => '업데이트';
 }

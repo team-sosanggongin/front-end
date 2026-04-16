@@ -1,22 +1,6 @@
 {
   "@@locale": "ko",
 
-  "appTitle": "소상공인",
-
-  "kakaoLoginButton": "카카오 로그인",
-  "startWithKakao": "카카오계정으로 시작하기",
-
-  "phoneVerificationTitle": "휴대폰 인증",
-  "phoneVerificationSubtitle": "안전한 서비스 이용을 위해 본인 인증을 진행합니다",
-  "phoneNumberLabel": "휴대폰 번호",
-  "getAuthCodeButton": "인증번호 받기",
-
-  "verifyAuthCodeTitle": "인증번호 확인",
-  "verifyAuthCodeSubtitle": "휴대폰으로 전송된 6자리 번호를 입력해주세요",
-  "confirmButton": "확인",
-  "invalidAuthCodeError": "인증번호가 올바르지 않습니다. 다시 확인해주세요",
-  "resendAuthCodeButton": "인증번호 재발송",
-
   "privacyConsentTitle": "개인정보 수집 및 이용 동의",
   "privacySection1Title": "1. 수집하는 개인정보 항목",
   "privacySection1Content": "회사는 서비스 제공을 위해 다음과 같은 개인정보를 수집하고 있습니다.",
@@ -53,42 +37,5 @@
   "salaryUseLegalRecord": "근로기준법에 따른 법정 기록 유지",
   "salaryUseDispute": "급여 관련 분쟁 및 분쟁 해결",
   "salarySection3Title": "3. 급여 정보의 보유 및 이용 기간",
-  "salarySection3Content": "급여 관련 정보는 관련 법령에 따라 다음과 같이 보관됩니다.",
-
-  "agreeButton": "위 내용에 동의합니다",
-  "skipButton": "나중에 하기",
-
-  "enterAccountInfoTitle": "계좌 정보를 입력해 주세요",
-  "registerAccountSubtitle": "급여 수령에 사용될 계좌를 등록해 주세요",
-  "bankLabel": "은행",
-  "selectBankHint": "은행을 선택하세요",
-  "accountNumberLabel": "계좌번호",
-  "accountNumberHint": "'-' 없이 숫자만 입력",
-  "noticeLabel": "안내사항",
-  "accountRegistrationNotice": "입력하신 계좌는 급여 수령 계좌로만 사용되며, 본인 명의의 계좌만 등록 가능합니다.",
-  "registerButton": "등록하기",
-
-  "noRegisteredAccounts": "등록된 계좌가 없습니다.",
-  "addAccountButton": "+ 계좌 추가",
-  "deleteAccountTitle": "계좌 삭제",
-  "deleteAccountConfirmation": "해당 계좌를 삭제하시겠습니까?",
-  "cancelButton": "취소",
-  "deleteButton": "삭제",
-  "changeButton": "변경",
-  "accountHolderLabel": "예금주",
-
-  "homeBannerTitle": "새로운 교육 시스템",
-  "homeBannerSubtitle": "직원 교육을 더 쉽게 관리하세요",
-  "noticesMenuLabel": "공지사항",
-
-  "noticesHeaderTitle": "공지사항",
-  "accountInfoHeaderTitle": "계좌 정보",
-  "myPageHeaderTitle": "마이페이지",
-
-  "viewProfileLink": "프로필 보기",
-  "accountInfoMenuLabel": "계좌 정보",
-
-  "phoneNumberHint": "01012345678",
-
-  "newBadge": "NEW"
+  "salarySection3Content": "급여 관련 정보는 관련 법령에 따라 다음과 같이 보관됩니다."
 }

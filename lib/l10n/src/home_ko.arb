@@ -1,0 +1,10 @@
+{
+  "@@locale": "ko",
+  "homeBannerTitle": "새로운 교육 시스템",
+  "homeBannerSubtitle": "직원 교육을 더 쉽게 관리하세요",
+  "noticesMenuLabel": "공지사항",
+  "noticesHeaderTitle": "공지사항",
+  "myPageHeaderTitle": "마이페이지",
+  "viewProfileLink": "프로필 보기",
+  "noNotices": "등록된 공지사항이 없습니다."
+}

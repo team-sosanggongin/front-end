@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../route_path.dart';
 import '../../../features/home/home_screen.dart';
 import '../../../features/home/home_shell_layout.dart';
-import '../../../features/home/models/notice.dart';
+import '../../../features/home/notice_provider.dart';
 import '../../../features/home/notice_detail_screen.dart';
 import '../../../features/home/notices_screen.dart';
 import '../../../features/my/my_page_screen.dart';

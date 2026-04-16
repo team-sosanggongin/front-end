@@ -9,13 +9,13 @@ class SEn extends S {
   SEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Small Biz';
-
-  @override
   String get kakaoLoginButton => 'Kakao Login';
 
   @override
   String get startWithKakao => 'Start with Kakao account';
+
+  @override
+  String get loginFailError => 'Login failed. Please try again.';
 
   @override
   String get phoneVerificationTitle => 'Phone Verification';
@@ -28,6 +28,9 @@ class SEn extends S {
   String get phoneNumberLabel => 'Phone number';
 
   @override
+  String get phoneNumberHint => '01012345678';
+
+  @override
   String get getAuthCodeButton => 'Get verification code';
 
   @override
@@ -36,9 +39,6 @@ class SEn extends S {
   @override
   String get verifyAuthCodeSubtitle =>
       'Enter the 6-digit code sent to your phone';
-
-  @override
-  String get confirmButton => 'Confirm';
 
   @override
   String get invalidAuthCodeError =>
@@ -171,12 +171,6 @@ class SEn extends S {
       'Salary information is retained in accordance with applicable laws.';
 
   @override
-  String get agreeButton => 'I agree to the above';
-
-  @override
-  String get skipButton => 'Skip for now';
-
-  @override
   String get enterAccountInfoTitle => 'Enter account information';
 
   @override
@@ -194,6 +188,12 @@ class SEn extends S {
 
   @override
   String get accountNumberHint => 'Numbers only, no dashes';
+
+  @override
+  String get accountAliasLabel => 'Account Alias';
+
+  @override
+  String get accountAliasHint => 'e.g. Salary account, Living expenses';
 
   @override
   String get noticeLabel => 'Notice';
@@ -219,9 +219,6 @@ class SEn extends S {
       'Are you sure you want to delete this account?';
 
   @override
-  String get cancelButton => 'Cancel';
-
-  @override
   String get deleteButton => 'Delete';
 
   @override
@@ -229,6 +226,12 @@ class SEn extends S {
 
   @override
   String get accountHolderLabel => 'Account holder';
+
+  @override
+  String get accountInfoHeaderTitle => 'Account Info';
+
+  @override
+  String get accountInfoMenuLabel => 'Account Info';
 
   @override
   String get homeBannerTitle => 'New Education System';
@@ -243,20 +246,66 @@ class SEn extends S {
   String get noticesHeaderTitle => 'Notices';
 
   @override
-  String get accountInfoHeaderTitle => 'Account Info';
-
-  @override
   String get myPageHeaderTitle => 'My Page';
 
   @override
   String get viewProfileLink => 'View profile';
 
   @override
-  String get accountInfoMenuLabel => 'Account Info';
+  String get noNotices => 'No notices available.';
 
   @override
-  String get phoneNumberHint => '01012345678';
+  String get appTitle => 'Small Biz';
+
+  @override
+  String get confirmButton => 'Confirm';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get skipButton => 'Skip for now';
+
+  @override
+  String get agreeButton => 'I agree to the above';
 
   @override
   String get newBadge => 'NEW';
+
+  @override
+  String get networkError => 'A network error has occurred.';
+
+  @override
+  String get retryButton => 'Retry';
+
+  @override
+  String get maintenanceDialogTitle => 'Under Maintenance';
+
+  @override
+  String get maintenanceStartLabel => 'Start';
+
+  @override
+  String get maintenanceEndLabel => 'End';
+
+  @override
+  String get forceUpdateDialogTitle => 'Update Required';
+
+  @override
+  String get forceUpdateDialogMessage =>
+      'Please update to the latest version to continue.';
+
+  @override
+  String get optionalUpdateDialogTitle => 'New Version Available';
+
+  @override
+  String get optionalUpdateDialogMessage =>
+      'We recommend updating for a better experience.';
+
+  @override
+  String updateDialogLatestVersion(String version) {
+    return 'Latest version: $version';
+  }
+
+  @override
+  String get updateButton => 'Update';
 }

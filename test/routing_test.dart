@@ -2,43 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:platform/l10n/app_localizations.dart';
-import 'package:platform/features/auth/login_screen.dart';
-import 'package:platform/features/auth/phone_verification_screen.dart';
-import 'package:platform/features/auth/phone_code_screen.dart';
-import 'package:platform/features/splash/splash_screen.dart';
-import 'package:platform/features/home/home_screen.dart';
-import 'package:platform/features/home/notices_screen.dart';
-import 'package:platform/features/home/notice_detail_screen.dart';
-import 'package:platform/features/home/models/notice.dart';
-import 'package:platform/features/consent/privacy_consent_screen.dart';
-import 'package:platform/features/consent/salary_consent_screen.dart';
-import 'package:platform/features/account/account_verification_screen.dart';
+import 'package:sosangongin_platform/features/account/account_verification_screen.dart';
+import 'package:sosangongin_platform/features/auth/login_screen.dart';
+import 'package:sosangongin_platform/features/auth/phone_code_screen.dart';
+import 'package:sosangongin_platform/features/auth/phone_verification_screen.dart';
+import 'package:sosangongin_platform/features/consent/privacy_consent_screen.dart';
+import 'package:sosangongin_platform/features/consent/salary_consent_screen.dart';
+import 'package:sosangongin_platform/features/home/home_screen.dart';
+import 'package:sosangongin_platform/features/home/notice_detail_screen.dart';
+import 'package:sosangongin_platform/features/home/notice_provider.dart';
+import 'package:sosangongin_platform/features/home/notices_screen.dart';
+import 'package:sosangongin_platform/features/splash/splash_screen.dart';
+import 'package:sosangongin_platform/l10n/app_localizations.dart';
 
-// router test
-// ─── 헬퍼 ────────────────────────────────────────────────
+// 헬퍼
+
 GoRouter _buildTestRouter(String initialLocation) {
   return GoRouter(
     initialLocation: initialLocation,
     routes: [
-      GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(path: '/privacy-consent', builder: (context, state) => const PrivacyConsentScreen()),
-      GoRoute(path: '/phone-verification', builder: (context, state) => const PhoneVerificationScreen()),
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/privacy-consent',
+        builder: (context, state) => const PrivacyConsentScreen(),
+      ),
+      GoRoute(
+        path: '/phone-verification',
+        builder: (context, state) => const PhoneVerificationScreen(),
+      ),
       GoRoute(
         path: '/phone-code',
-        builder: (context, state) => PhoneCodeScreen(phoneNumber: state.extra as String? ?? ''),
+        builder: (context, state) =>
+            PhoneCodeScreen(phoneNumber: state.extra as String? ?? ''),
       ),
       GoRoute(
         path: '/salary-consent',
-        builder: (context, state) => SalaryConsentScreen(fromMyPage: state.extra as bool? ?? false),
+        builder: (context, state) =>
+            SalaryConsentScreen(fromMyPage: state.extra as bool? ?? false),
       ),
-      GoRoute(path: '/account-verification', builder: (context, state) => const AccountVerificationScreen()),
-      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-      GoRoute(path: '/home/notices', builder: (context, state) => const NoticesScreen()),
+      GoRoute(
+        path: '/account-verification',
+        builder: (context, state) => const AccountVerificationScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/home/notices',
+        builder: (context, state) => const NoticesScreen(),
+      ),
       GoRoute(
         path: '/home/notices/:id',
-        builder: (context, state) => NoticeDetailScreen(notice: state.extra as Notice),
+        builder: (context, state) =>
+            NoticeDetailScreen(notice: state.extra as Notice),
       ),
     ],
   );
@@ -55,16 +79,20 @@ Widget _buildTestApp(GoRouter router) {
   );
 }
 
-const _mockNotice = Notice(
-  id: 'notice_001',
+// Notice 모델이 notice_provider.dart로 이동됨
+final _mockNotice = Notice(
+  id: 1,
   title: '정기 휴무일 안내',
-  description: '매주 월요일은 정기 휴무일입니다.',
-  date: '2026.03.05',
-  isNew: true,
+  content: '매주 월요일은 정기 휴무일입니다.',
+  authorName: '관리자',
+  isPinned: true,
+  viewCount: 10,
+  createdAt: DateTime.now().toIso8601String(),
 );
 
+// ── 화면 렌더링 테스트 ─────────────────────────────────────
+
 void main() {
-  // 랜더링 확인
   group('화면 렌더링', () {
     testWidgets('스플래시', (tester) async {
       final router = _buildTestRouter('/splash');
@@ -130,9 +158,7 @@ void main() {
             localizationsDelegates: S.localizationsDelegates,
             supportedLocales: S.supportedLocales,
             locale: const Locale('ko'),
-            home: Scaffold(
-              body: const NoticesScreen(),
-            ),
+            home: const Scaffold(body: NoticesScreen()),
           ),
         ),
       );
@@ -142,12 +168,13 @@ void main() {
 
     testWidgets('공지사항 상세', (tester) async {
       final router = GoRouter(
-        initialLocation: '/home/notices/notice_001',
+        initialLocation: '/home/notices/1',
         initialExtra: _mockNotice,
         routes: [
           GoRoute(
             path: '/home/notices/:id',
-            builder: (context, state) => NoticeDetailScreen(notice: state.extra as Notice),
+            builder: (context, state) =>
+                NoticeDetailScreen(notice: state.extra as Notice),
           ),
         ],
       );
@@ -155,19 +182,17 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(NoticeDetailScreen), findsOneWidget);
-      //공지 내용이 맞게 표시되는지
       expect(find.text('정기 휴무일 안내'), findsOneWidget);
     });
   });
 
-
   // 급여동의 분기 테스트
+
   group('급여동의 분기', () {
     testWidgets('가입 플로우 - 나중에 하기 노출', (tester) async {
       final router = _buildTestRouter('/salary-consent');
       await tester.pumpWidget(_buildTestApp(router));
       await tester.pumpAndSettle();
-
       expect(find.text('나중에 하기'), findsOneWidget);
     });
 
@@ -177,13 +202,13 @@ void main() {
         routes: [
           GoRoute(
             path: '/salary-consent',
-            builder: (context, state) => const SalaryConsentScreen(fromMyPage: true),
+            builder: (context, state) =>
+            const SalaryConsentScreen(fromMyPage: true),
           ),
         ],
       );
       await tester.pumpWidget(_buildTestApp(router));
       await tester.pumpAndSettle();
-
       expect(find.text('나중에 하기'), findsNothing);
     });
   });
