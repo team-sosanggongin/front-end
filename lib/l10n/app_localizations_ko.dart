@@ -237,6 +237,180 @@ class SKo extends S {
   String get noNotices => '등록된 공지사항이 없습니다.';
 
   @override
+  String get roleManagementMenuLabel => '역할 관리';
+
+  @override
+  String get employeeAddMenuLabel => '직원 추가';
+
+  @override
+  String get roleManagementTitle => '역할 관리';
+
+  @override
+  String get roleAddTitle => '역할 추가';
+
+  @override
+  String get rolePermissionTitle => '권한 설정';
+
+  @override
+  String get roleDetailTitle => '역할 상세';
+
+  @override
+  String get roleEmptyStateHeading => '역할을 만들어보세요';
+
+  @override
+  String get roleEmptyStateSubtitle => '직원을 초대하기 전 역할을 먼저 설정하면\n권한 관리가 편리해져요';
+
+  @override
+  String get roleEmptyStateButton => '시작하기';
+
+  @override
+  String get roleAddStepOneHeading => '어떤 역할을 만들까요?';
+
+  @override
+  String get roleAddStepOneSubtitle => '역할 유형을 선택하면 기본 권한이 설정돼요';
+
+  @override
+  String get roleTypeManager => '매니저';
+
+  @override
+  String get roleTypePartTimer => '파트타이머';
+
+  @override
+  String get roleTypeEmployee => '직원';
+
+  @override
+  String get roleTypeNewRole => '새 역할 만들기';
+
+  @override
+  String get roleNameLabel => '역할 이름';
+
+  @override
+  String get roleNameHint => '예) 주말 매니저';
+
+  @override
+  String get rolePermissionLabel => '권한 설정';
+
+  @override
+  String get roleNextButton => '다음';
+
+  @override
+  String get roleSaveButton => '저장';
+
+  @override
+  String get roleCompleteButton => '완료';
+
+  @override
+  String get roleDeleteButton => '삭제';
+
+  @override
+  String get roleDeleteDialogTitle => '역할을 삭제하시겠어요?';
+
+  @override
+  String get roleDeleteDialogMessage => '이 역할에 배정된 직원이 있다면\n역할이 해제될 수 있어요.';
+
+  @override
+  String get permissionStaffManage => '직원 관리';
+
+  @override
+  String get permissionStaffManageDesc => '직원 등록 및 관리';
+
+  @override
+  String get permissionStoreManage => '매장 관리';
+
+  @override
+  String get permissionStoreManageDesc => '매장 정보 조회 및 수정';
+
+  @override
+  String get permissionContractManage => '근로계약서 관리';
+
+  @override
+  String get permissionContractManageDesc => '근로계약서 등록 및 확인';
+
+  @override
+  String get permissionSalaryManage => '급여 관리';
+
+  @override
+  String get permissionSalaryManageDesc => '급여 조회 및 관리';
+
+  @override
+  String get permissionStaffInvite => '직원 초대';
+
+  @override
+  String get permissionStaffInviteDesc => '초대코드 생성 및 공유';
+
+  @override
+  String get contractMethodTitle => '근로계약서 등록';
+
+  @override
+  String get contractMethodHeading => '어떤 방식으로 등록할까요?';
+
+  @override
+  String get contractMethodDirectLabel => 'PDF 직접 업로드';
+
+  @override
+  String get contractMethodDirectDesc => 'PDF 파일을 직접 업로드해요';
+
+  @override
+  String get contractMethodTemplateLabel => '템플릿 불러오기';
+
+  @override
+  String get contractMethodTemplateDesc => '준비 중입니다';
+
+  @override
+  String get contractUploadTitle => '근로계약서 등록';
+
+  @override
+  String get contractUploadHeading => '근로계약서를 업로드해주세요';
+
+  @override
+  String get contractUploadSubtitle => 'PDF 파일만 업로드 가능해요';
+
+  @override
+  String get contractUploadButton => '파일 선택';
+
+  @override
+  String get contractUploadNextButton => '다음';
+
+  @override
+  String get contractUploadEmptyError => '파일을 선택해주세요';
+
+  @override
+  String get contractViewerTitle => '계약서 확인';
+
+  @override
+  String get contractViewerConfirmButton => '다음';
+
+  @override
+  String get inviteCodeTitle => '초대 코드';
+
+  @override
+  String get inviteCodeHeading => '초대 코드가 생성됐어요!';
+
+  @override
+  String get inviteCodeSubtitle => '아래 코드를 직원에게 공유해주세요';
+
+  @override
+  String get inviteCodeCopyButton => '코드 복사';
+
+  @override
+  String get inviteCodeCopied => '클립보드에 복사됐어요';
+
+  @override
+  String get inviteCodeShareKakao => '카카오';
+
+  @override
+  String get inviteCodeShareLine => '라인';
+
+  @override
+  String get inviteCodeShareOther => '기타';
+
+  @override
+  String get inviteCodeDoneButton => '완료';
+
+  @override
+  String get inviteCodeShareKakaoButton => '카카오톡으로 공유하기';
+
+  @override
   String get appTitle => '소상공인';
 
   @override

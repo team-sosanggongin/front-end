@@ -6,5 +6,7 @@
   "noticesHeaderTitle": "Notices",
   "myPageHeaderTitle": "My Page",
   "viewProfileLink": "View profile",
-  "noNotices": "No notices available."
+  "noNotices": "No notices available.",
+  "roleManagementMenuLabel": "Role Management",
+  "employeeAddMenuLabel": "Add Employee"
 }

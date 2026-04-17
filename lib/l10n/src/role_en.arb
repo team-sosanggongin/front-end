@@ -1,0 +1,43 @@
+{
+  "@@locale": "en",
+
+  "roleManagementTitle": "Role Management",
+  "roleAddTitle": "Add Role",
+  "rolePermissionTitle": "Permission Settings",
+  "roleDetailTitle": "Role Detail",
+
+  "roleEmptyStateHeading": "Create your first role",
+  "roleEmptyStateSubtitle": "Set up roles before inviting employees\nto manage permissions easily.",
+  "roleEmptyStateButton": "Get Started",
+
+  "roleAddStepOneHeading": "What kind of role?",
+  "roleAddStepOneSubtitle": "Default permissions will be set based on the role type.",
+
+  "roleTypeManager": "Manager",
+  "roleTypePartTimer": "Part-timer",
+  "roleTypeEmployee": "Employee",
+  "roleTypeNewRole": "Create New Role",
+
+  "roleNameLabel": "Role Name",
+  "roleNameHint": "e.g. Weekend Manager",
+  "rolePermissionLabel": "Permissions",
+
+  "roleNextButton": "Next",
+  "roleSaveButton": "Save",
+  "roleCompleteButton": "Done",
+  "roleDeleteButton": "Delete",
+
+  "roleDeleteDialogTitle": "Delete this role?",
+  "roleDeleteDialogMessage": "Employees assigned to this role\nmay have their role removed.",
+
+  "permissionStaffManage": "Staff Management",
+  "permissionStaffManageDesc": "Register and manage employees",
+  "permissionStoreManage": "Store Management",
+  "permissionStoreManageDesc": "View and edit store information",
+  "permissionContractManage": "Contract Management",
+  "permissionContractManageDesc": "Register and review contracts",
+  "permissionSalaryManage": "Payroll",
+  "permissionSalaryManageDesc": "View and manage payroll",
+  "permissionStaffInvite": "Invite Staff",
+  "permissionStaffInviteDesc": "Generate and share invite codes"
+}
