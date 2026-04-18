@@ -1,0 +1,55 @@
+{
+  "@@locale": "en",
+
+  "contractMethodTitle": "Employment Contract",
+  "contractMethodHeading": "How would you like to register?",
+  "contractMethodDirectLabel": "Upload PDF",
+  "contractMethodDirectDesc": "Upload a PDF file directly",
+  "contractMethodTemplateLabel": "Load Template",
+  "contractMethodTemplateDesc": "Coming soon",
+
+  "contractUploadTitle": "Employment Contract",
+  "contractUploadHeading": "Please upload the contract",
+  "contractUploadSubtitle": "Only PDF files are supported",
+  "contractUploadButton": "Select File",
+  "contractUploadNextButton": "Next",
+  "contractUploadEmptyError": "Please select a file",
+
+  "contractViewerTitle": "Review Contract",
+  "contractViewerConfirmButton": "Next",
+
+  "inviteCodeTitle": "Invite Code",
+  "inviteCodeHeading": "Invite code generated!",
+  "inviteCodeSubtitle": "Share the code below with your employee",
+  "inviteCodeCopyButton": "Copy Code",
+  "inviteCodeCopied": "Copied to clipboard",
+  "inviteCodeShareKakao": "Kakao",
+  "inviteCodeShareLine": "Line",
+  "inviteCodeShareOther": "Other",
+  "inviteCodeDoneButton": "Done",
+  "inviteCodeShareKakaoButton": "Share via KakaoTalk",
+
+  "employeeManagementTitle": "Employee Management",
+  "employeeListEmptyHeading": "No employees registered",
+  "employeeListEmptySubtitle": "Add employees to get started",
+
+  "employeeDetailTitle": "Employee Detail",
+  "employeeRoleLabel": "Assigned Role",
+  "employeeStartDateLabel": "Start Date",
+  "employeeRoleChangeButton": "Change Role",
+  "employeeContractRequestButton": "Request Contract Update",
+  "employeeResignButton": "Process Resignation",
+
+  "employeeRoleChangeTitle": "Change Role",
+  "employeeResignDialogTitle": "Process resignation?",
+  "employeeResignDialogMessage": "All permissions will be revoked\nand the employee will be marked as resigned.",
+  "employeeStatusActive": "Active",
+  "employeeStatusResigned": "Resigned",
+
+  "employeeRoleSelectTitle": "Select Role",
+  "employeeRoleSelectHeading": "Select a role to assign to the employee",
+  "employeeRoleSelectSearchHint": "Search roles",
+  "employeeRoleSelectEmpty": "No results found",
+  "employeeRoleSelectNoRole": "Can't find the right role?",
+  "employeeRoleSelectCreateButton": "Create New Role"
+}

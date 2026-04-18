@@ -895,6 +895,126 @@ abstract class S {
   /// **'Share via KakaoTalk'**
   String get inviteCodeShareKakaoButton;
 
+  /// No description provided for @employeeManagementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Management'**
+  String get employeeManagementTitle;
+
+  /// No description provided for @employeeListEmptyHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'No employees registered'**
+  String get employeeListEmptyHeading;
+
+  /// No description provided for @employeeListEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add employees to get started'**
+  String get employeeListEmptySubtitle;
+
+  /// No description provided for @employeeDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Detail'**
+  String get employeeDetailTitle;
+
+  /// No description provided for @employeeRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned Role'**
+  String get employeeRoleLabel;
+
+  /// No description provided for @employeeStartDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get employeeStartDateLabel;
+
+  /// No description provided for @employeeRoleChangeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Role'**
+  String get employeeRoleChangeButton;
+
+  /// No description provided for @employeeContractRequestButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Contract Update'**
+  String get employeeContractRequestButton;
+
+  /// No description provided for @employeeResignButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Process Resignation'**
+  String get employeeResignButton;
+
+  /// No description provided for @employeeRoleChangeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Role'**
+  String get employeeRoleChangeTitle;
+
+  /// No description provided for @employeeResignDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Process resignation?'**
+  String get employeeResignDialogTitle;
+
+  /// No description provided for @employeeResignDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All permissions will be revoked\nand the employee will be marked as resigned.'**
+  String get employeeResignDialogMessage;
+
+  /// No description provided for @employeeStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get employeeStatusActive;
+
+  /// No description provided for @employeeStatusResigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Resigned'**
+  String get employeeStatusResigned;
+
+  /// No description provided for @employeeRoleSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Role'**
+  String get employeeRoleSelectTitle;
+
+  /// No description provided for @employeeRoleSelectHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a role to assign to the employee'**
+  String get employeeRoleSelectHeading;
+
+  /// No description provided for @employeeRoleSelectSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search roles'**
+  String get employeeRoleSelectSearchHint;
+
+  /// No description provided for @employeeRoleSelectEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get employeeRoleSelectEmpty;
+
+  /// No description provided for @employeeRoleSelectNoRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t find the right role?'**
+  String get employeeRoleSelectNoRole;
+
+  /// No description provided for @employeeRoleSelectCreateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Role'**
+  String get employeeRoleSelectCreateButton;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

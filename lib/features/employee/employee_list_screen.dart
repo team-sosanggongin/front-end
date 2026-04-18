@@ -6,29 +6,29 @@ import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../common/widgets/empty_state.dart';
 import '../../l10n/app_localizations.dart';
-import 'role_provider.dart';
-import '../../common/widgets/role_list_tile.dart';
+import 'employee_provider.dart';
+import 'widgets/employee_list_tile.dart';
 
-class RoleListScreen extends ConsumerWidget {
-  const RoleListScreen({super.key});
+class EmployeeListScreen extends ConsumerWidget {
+  const EmployeeListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rolesAsync = ref.watch(roleListProvider);
+    final employeesAsync = ref.watch(employeeListProvider);
     final rs = ResponsiveSize.of(context);
     final s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(s.roleManagementTitle),
+        title: Text(s.employeeManagementTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context.push(RolePath.add),
+            onPressed: () => context.push(EmployeePath.roleSelect),
           ),
         ],
       ),
-      body: rolesAsync.when(
+      body: employeesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
           child: Column(
@@ -38,29 +38,32 @@ class RoleListScreen extends ConsumerWidget {
               SizedBox(height: rs.h(12)),
               TextButton(
                 onPressed: () =>
-                    ref.read(roleListProvider.notifier).fetch(refresh: true),
+                    ref.read(employeeListProvider.notifier).fetch(refresh: true),
                 child: Text(s.retryButton),
               ),
             ],
           ),
         ),
-        data: (roles) => roles.isEmpty
+        data: (employees) => employees.isEmpty
             ? EmptyState(
-          icon: Icons.manage_accounts_outlined,
-          heading: s.roleEmptyStateHeading,
-          subtitle: s.roleEmptyStateSubtitle,
-          buttonLabel: s.roleEmptyStateButton,
-          onButtonTap: () => context.push(RolePath.add),
+          icon: Icons.people_outline,
+          heading: s.employeeListEmptyHeading,
+          subtitle: s.employeeListEmptySubtitle,
+          buttonLabel: s.employeeAddMenuLabel,
+          onButtonTap: () => context.push(EmployeePath.roleSelect),
         )
             : ListView.separated(
-          itemCount: roles.length,
+          itemCount: employees.length,
           separatorBuilder: (_, __) =>
           const Divider(height: 1, color: AppColors.borderGray),
           itemBuilder: (context, index) {
-            final role = roles[index];
-            return RoleListTile(
-              role: role,
-              onTap: () => context.push(RolePath.detail, extra: role),
+            final employee = employees[index];
+            return EmployeeListTile(
+              employee: employee,
+              onTap: () => context.push(
+                EmployeePath.detail,
+                extra: employee,
+              ),
             );
           },
         ),

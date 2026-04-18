@@ -84,9 +84,9 @@ class HomeScreen extends StatelessWidget {
         onTap: () => context.push(RolePath.root),
       ),
       _MenuItem(
-        icon: Icons.people_outline,
-        label: s.employeeAddMenuLabel,
-        onTap: () => context.push(EmployeePath.contractMethod),
+      icon: Icons.people_outline,
+      label: s.employeeManagementTitle,
+      onTap: () => context.push(EmployeePath.list),
       ),
     ];
 

@@ -432,6 +432,68 @@ class SEn extends S {
   String get inviteCodeShareKakaoButton => 'Share via KakaoTalk';
 
   @override
+  String get employeeManagementTitle => 'Employee Management';
+
+  @override
+  String get employeeListEmptyHeading => 'No employees registered';
+
+  @override
+  String get employeeListEmptySubtitle => 'Add employees to get started';
+
+  @override
+  String get employeeDetailTitle => 'Employee Detail';
+
+  @override
+  String get employeeRoleLabel => 'Assigned Role';
+
+  @override
+  String get employeeStartDateLabel => 'Start Date';
+
+  @override
+  String get employeeRoleChangeButton => 'Change Role';
+
+  @override
+  String get employeeContractRequestButton => 'Request Contract Update';
+
+  @override
+  String get employeeResignButton => 'Process Resignation';
+
+  @override
+  String get employeeRoleChangeTitle => 'Change Role';
+
+  @override
+  String get employeeResignDialogTitle => 'Process resignation?';
+
+  @override
+  String get employeeResignDialogMessage =>
+      'All permissions will be revoked\nand the employee will be marked as resigned.';
+
+  @override
+  String get employeeStatusActive => 'Active';
+
+  @override
+  String get employeeStatusResigned => 'Resigned';
+
+  @override
+  String get employeeRoleSelectTitle => 'Select Role';
+
+  @override
+  String get employeeRoleSelectHeading =>
+      'Select a role to assign to the employee';
+
+  @override
+  String get employeeRoleSelectSearchHint => 'Search roles';
+
+  @override
+  String get employeeRoleSelectEmpty => 'No results found';
+
+  @override
+  String get employeeRoleSelectNoRole => 'Can\'t find the right role?';
+
+  @override
+  String get employeeRoleSelectCreateButton => 'Create New Role';
+
+  @override
   String get appTitle => 'Small Biz';
 
   @override

@@ -411,6 +411,66 @@ class SKo extends S {
   String get inviteCodeShareKakaoButton => '카카오톡으로 공유하기';
 
   @override
+  String get employeeManagementTitle => '직원 관리';
+
+  @override
+  String get employeeListEmptyHeading => '등록된 직원이 없어요';
+
+  @override
+  String get employeeListEmptySubtitle => '직원을 추가하고 관리해보세요';
+
+  @override
+  String get employeeDetailTitle => '직원 상세';
+
+  @override
+  String get employeeRoleLabel => '부여 역할';
+
+  @override
+  String get employeeStartDateLabel => '근무 시작일';
+
+  @override
+  String get employeeRoleChangeButton => '직원 롤 변경';
+
+  @override
+  String get employeeContractRequestButton => '근로계약서 수정 요청';
+
+  @override
+  String get employeeResignButton => '퇴직 처리';
+
+  @override
+  String get employeeRoleChangeTitle => '롤 변경';
+
+  @override
+  String get employeeResignDialogTitle => '퇴직 처리하시겠습니까?';
+
+  @override
+  String get employeeResignDialogMessage => '이 직원의 모든 권한이 해제되고\n퇴직 처리됩니다.';
+
+  @override
+  String get employeeStatusActive => '재직중';
+
+  @override
+  String get employeeStatusResigned => '퇴직';
+
+  @override
+  String get employeeRoleSelectTitle => '역할 선택';
+
+  @override
+  String get employeeRoleSelectHeading => '직원에게 할당할 역할을 선택해주세요';
+
+  @override
+  String get employeeRoleSelectSearchHint => '역할 검색';
+
+  @override
+  String get employeeRoleSelectEmpty => '검색 결과가 없어요';
+
+  @override
+  String get employeeRoleSelectNoRole => '알맞은 역할이 없다면?';
+
+  @override
+  String get employeeRoleSelectCreateButton => '새 역할 만들기';
+
+  @override
   String get appTitle => '소상공인';
 
   @override

@@ -3,13 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../common/widgets/primary_button.dart';
 import '../../common/widgets/tag_badge.dart';
 import '../../core/router/route_path.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/responsive_size.dart';
 import '../../l10n/app_localizations.dart';
-import '../consent/consent_provider.dart';
 import '../my/user_provider.dart';
 import 'account_list_provider.dart';
 

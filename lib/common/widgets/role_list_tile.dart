@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/responsive_size.dart';
-import '../../../l10n/app_localizations.dart';
-import '../role_provider.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_size.dart';
+import '../../l10n/app_localizations.dart';
+import '../../features/role/role_provider.dart';
 
 class RoleListTile extends StatelessWidget {
   final RoleModel role;

@@ -41,6 +41,9 @@ final rootRoutes = [
   ),
   GoRoute(
     path: RoutePath.accountVerification,
-    builder: (context, state) => const AccountVerificationScreen(),
+    builder: (context, state) {
+      final fromMyPage = state.extra as bool? ?? false;
+      return AccountVerificationScreen(fromMyPage: fromMyPage);
+    },
   ),
 ];

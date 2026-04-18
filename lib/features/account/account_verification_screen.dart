@@ -12,7 +12,12 @@ import '../consent/consent_provider.dart';
 import 'account_provider.dart';
 
 class AccountVerificationScreen extends ConsumerStatefulWidget {
-  const AccountVerificationScreen({super.key});
+  final bool fromMyPage;
+
+  const AccountVerificationScreen({
+    super.key,
+    this.fromMyPage = false,
+  });
 
   @override
   ConsumerState<AccountVerificationScreen> createState() =>
@@ -76,7 +81,12 @@ class _AccountVerificationScreenState
     ref.listen<AccountState>(accountProvider, (_, next) {
       switch (next) {
         case AccountStateSuccess():
-          context.go(HomePath.root);
+          if (widget.fromMyPage) {
+            context.pop(); // 마이페이지에서 온 경우 그냥 뒤로
+            context.pop(); // salary_consent까지 pop
+          } else {
+            context.go(HomePath.root); // 초기 플로우는 go 유지
+          }
         case AccountStateError(:final message):
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(message)));

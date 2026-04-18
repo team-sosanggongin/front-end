@@ -32,6 +32,9 @@ abstract class RolePath {
 }
 
 abstract class EmployeePath {
+  static const list           = '/employee';
+  static const detail         = '/employee/detail';
+  static const roleSelect     = '/employee/add/role-select';
   static const contractMethod = '/employee/add/contract-method';
   static const contractUpload = '/employee/add/contract-upload';
   static const contractViewer = '/employee/add/contract-viewer';

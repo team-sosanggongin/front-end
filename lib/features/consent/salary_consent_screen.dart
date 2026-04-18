@@ -21,7 +21,11 @@ class SalaryConsentScreen extends ConsumerWidget {
     ref.listen<ConsentState>(consentProvider, (_, next) {
       switch (next) {
         case ConsentStateSuccess():
-          context.push(RoutePath.accountVerification);
+          context.push(
+              RoutePath.accountVerification,
+              extra: fromMyPage,
+          );
+
         case ConsentStateError(:final message):
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(message)));

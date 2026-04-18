@@ -32,6 +32,8 @@ abstract class _AccountApiPath {
 
 final accountListProvider =
 StateNotifierProvider<AccountListNotifier, AccountListState>((ref) {
+  // keepAlive로 라우트 변경 시에도 유지
+  ref.keepAlive();
   return AccountListNotifier(ref.read(dioProvider));
 });
 
@@ -45,6 +47,9 @@ class AccountListNotifier extends StateNotifier<AccountListState> {
   final Dio _dio;
 
   Future<void> fetch() async {
+    // Mock일 때 이미 데이터 있으면 재fetch 안 함
+    if (EnvConfig.isMock && state is AccountListStateLoaded) return;
+
     state = AccountListStateLoading();
     try {
       if (EnvConfig.isMock) {
