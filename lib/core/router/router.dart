@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'route_path.dart';
 import 'routes/home_routes.dart';
 import 'routes/root_routes.dart';
+import 'routes/role_routes.dart';
+import 'routes/employee_routes.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -13,6 +15,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: RoutePath.splash,
     routes: [
       ...rootRoutes,
+      ...roleRoutes,
+      ...employeeRoutes,
       homeShellRoute,
     ],
   );

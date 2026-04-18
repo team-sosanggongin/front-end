@@ -24,3 +24,19 @@ abstract class MyPath {
   static const root = '/my';
   static const accounts = '/my/accounts';
 }
+
+abstract class RolePath {
+  static const root   = '/role';
+  static const detail = '/role/detail';
+  static const add    = '/role/add';
+}
+
+abstract class EmployeePath {
+  static const list           = '/employee';
+  static const detail         = '/employee/detail';
+  static const roleSelect     = '/employee/add/role-select';
+  static const contractMethod = '/employee/add/contract-method';
+  static const contractUpload = '/employee/add/contract-upload';
+  static const contractViewer = '/employee/add/contract-viewer';
+  static const inviteCode     = '/employee/add/invite-code';
+}

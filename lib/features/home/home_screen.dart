@@ -71,25 +71,35 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildMenuGrid(BuildContext context) {
     final rs = ResponsiveSize.of(context);
+    final s = S.of(context);
     final menuItems = [
       _MenuItem(
         icon: Icons.notifications_outlined,
-        label: S.of(context).noticesMenuLabel,
+        label: s.noticesMenuLabel,
         onTap: () => context.push(HomePath.notices),
+      ),
+      _MenuItem(
+        icon: Icons.manage_accounts_outlined,
+        label: s.roleManagementMenuLabel,
+        onTap: () => context.push(RolePath.root),
+      ),
+      _MenuItem(
+      icon: Icons.people_outline,
+      label: s.employeeManagementTitle,
+      onTap: () => context.push(EmployeePath.list),
       ),
     ];
 
-    return Row(
-      children: menuItems.map((item) {
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: item == menuItems.last ? 0 : rs.w(12),
-            ),
-            child: _buildMenuCard(context, item),
-          ),
-        );
-      }).toList(),
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      crossAxisSpacing: rs.w(12),
+      mainAxisSpacing: rs.h(12),
+      childAspectRatio: 1.2,
+      children: menuItems
+          .map((item) => _buildMenuCard(context, item))
+          .toList(),
     );
   }
 
@@ -105,6 +115,7 @@ class HomeScreen extends StatelessWidget {
           borderRadius: rs.radius(16),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(item.icon, size: rs.w(32), color: AppColors.textPrimary),
             SizedBox(height: rs.h(12)),

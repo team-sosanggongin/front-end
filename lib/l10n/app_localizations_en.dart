@@ -255,6 +255,245 @@ class SEn extends S {
   String get noNotices => 'No notices available.';
 
   @override
+  String get roleManagementMenuLabel => 'Role Management';
+
+  @override
+  String get employeeAddMenuLabel => 'Add Employee';
+
+  @override
+  String get roleManagementTitle => 'Role Management';
+
+  @override
+  String get roleAddTitle => 'Add Role';
+
+  @override
+  String get rolePermissionTitle => 'Permission Settings';
+
+  @override
+  String get roleDetailTitle => 'Role Detail';
+
+  @override
+  String get roleEmptyStateHeading => 'Create your first role';
+
+  @override
+  String get roleEmptyStateSubtitle =>
+      'Set up roles before inviting employees\nto manage permissions easily.';
+
+  @override
+  String get roleEmptyStateButton => 'Get Started';
+
+  @override
+  String get roleAddStepOneHeading => 'What kind of role?';
+
+  @override
+  String get roleAddStepOneSubtitle =>
+      'Default permissions will be set based on the role type.';
+
+  @override
+  String get roleTypeManager => 'Manager';
+
+  @override
+  String get roleTypePartTimer => 'Part-timer';
+
+  @override
+  String get roleTypeEmployee => 'Employee';
+
+  @override
+  String get roleTypeNewRole => 'Create New Role';
+
+  @override
+  String get roleNameLabel => 'Role Name';
+
+  @override
+  String get roleNameHint => 'e.g. Weekend Manager';
+
+  @override
+  String get rolePermissionLabel => 'Permissions';
+
+  @override
+  String get roleNextButton => 'Next';
+
+  @override
+  String get roleSaveButton => 'Save';
+
+  @override
+  String get roleCompleteButton => 'Done';
+
+  @override
+  String get roleDeleteButton => 'Delete';
+
+  @override
+  String get roleDeleteDialogTitle => 'Delete this role?';
+
+  @override
+  String get roleDeleteDialogMessage =>
+      'Employees assigned to this role\nmay have their role removed.';
+
+  @override
+  String get permissionStaffManage => 'Staff Management';
+
+  @override
+  String get permissionStaffManageDesc => 'Register and manage employees';
+
+  @override
+  String get permissionStoreManage => 'Store Management';
+
+  @override
+  String get permissionStoreManageDesc => 'View and edit store information';
+
+  @override
+  String get permissionContractManage => 'Contract Management';
+
+  @override
+  String get permissionContractManageDesc => 'Register and review contracts';
+
+  @override
+  String get permissionSalaryManage => 'Payroll';
+
+  @override
+  String get permissionSalaryManageDesc => 'View and manage payroll';
+
+  @override
+  String get permissionStaffInvite => 'Invite Staff';
+
+  @override
+  String get permissionStaffInviteDesc => 'Generate and share invite codes';
+
+  @override
+  String get contractMethodTitle => 'Employment Contract';
+
+  @override
+  String get contractMethodHeading => 'How would you like to register?';
+
+  @override
+  String get contractMethodDirectLabel => 'Upload PDF';
+
+  @override
+  String get contractMethodDirectDesc => 'Upload a PDF file directly';
+
+  @override
+  String get contractMethodTemplateLabel => 'Load Template';
+
+  @override
+  String get contractMethodTemplateDesc => 'Coming soon';
+
+  @override
+  String get contractUploadTitle => 'Employment Contract';
+
+  @override
+  String get contractUploadHeading => 'Please upload the contract';
+
+  @override
+  String get contractUploadSubtitle => 'Only PDF files are supported';
+
+  @override
+  String get contractUploadButton => 'Select File';
+
+  @override
+  String get contractUploadNextButton => 'Next';
+
+  @override
+  String get contractUploadEmptyError => 'Please select a file';
+
+  @override
+  String get contractViewerTitle => 'Review Contract';
+
+  @override
+  String get contractViewerConfirmButton => 'Next';
+
+  @override
+  String get inviteCodeTitle => 'Invite Code';
+
+  @override
+  String get inviteCodeHeading => 'Invite code generated!';
+
+  @override
+  String get inviteCodeSubtitle => 'Share the code below with your employee';
+
+  @override
+  String get inviteCodeCopyButton => 'Copy Code';
+
+  @override
+  String get inviteCodeCopied => 'Copied to clipboard';
+
+  @override
+  String get inviteCodeShareKakao => 'Kakao';
+
+  @override
+  String get inviteCodeShareLine => 'Line';
+
+  @override
+  String get inviteCodeShareOther => 'Other';
+
+  @override
+  String get inviteCodeDoneButton => 'Done';
+
+  @override
+  String get inviteCodeShareKakaoButton => 'Share via KakaoTalk';
+
+  @override
+  String get employeeManagementTitle => 'Employee Management';
+
+  @override
+  String get employeeListEmptyHeading => 'No employees registered';
+
+  @override
+  String get employeeListEmptySubtitle => 'Add employees to get started';
+
+  @override
+  String get employeeDetailTitle => 'Employee Detail';
+
+  @override
+  String get employeeRoleLabel => 'Assigned Role';
+
+  @override
+  String get employeeStartDateLabel => 'Start Date';
+
+  @override
+  String get employeeRoleChangeButton => 'Change Role';
+
+  @override
+  String get employeeContractRequestButton => 'Request Contract Update';
+
+  @override
+  String get employeeResignButton => 'Process Resignation';
+
+  @override
+  String get employeeRoleChangeTitle => 'Change Role';
+
+  @override
+  String get employeeResignDialogTitle => 'Process resignation?';
+
+  @override
+  String get employeeResignDialogMessage =>
+      'All permissions will be revoked\nand the employee will be marked as resigned.';
+
+  @override
+  String get employeeStatusActive => 'Active';
+
+  @override
+  String get employeeStatusResigned => 'Resigned';
+
+  @override
+  String get employeeRoleSelectTitle => 'Select Role';
+
+  @override
+  String get employeeRoleSelectHeading =>
+      'Select a role to assign to the employee';
+
+  @override
+  String get employeeRoleSelectSearchHint => 'Search roles';
+
+  @override
+  String get employeeRoleSelectEmpty => 'No results found';
+
+  @override
+  String get employeeRoleSelectNoRole => 'Can\'t find the right role?';
+
+  @override
+  String get employeeRoleSelectCreateButton => 'Create New Role';
+
+  @override
   String get appTitle => 'Small Biz';
 
   @override

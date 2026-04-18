@@ -6,5 +6,7 @@
   "noticesHeaderTitle": "공지사항",
   "myPageHeaderTitle": "마이페이지",
   "viewProfileLink": "프로필 보기",
-  "noNotices": "등록된 공지사항이 없습니다."
+  "noNotices": "등록된 공지사항이 없습니다.",
+  "roleManagementMenuLabel": "역할 관리",
+  "employeeAddMenuLabel": "직원 추가"
 }

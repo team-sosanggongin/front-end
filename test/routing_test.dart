@@ -13,9 +13,19 @@ import 'package:sosangongin_platform/features/home/notice_detail_screen.dart';
 import 'package:sosangongin_platform/features/home/notice_provider.dart';
 import 'package:sosangongin_platform/features/home/notices_screen.dart';
 import 'package:sosangongin_platform/features/splash/splash_screen.dart';
+import 'package:sosangongin_platform/features/role/role_add_screen.dart';
+import 'package:sosangongin_platform/features/role/role_detail_screen.dart';
+import 'package:sosangongin_platform/features/role/role_list_screen.dart';
+import 'package:sosangongin_platform/features/role/role_provider.dart';
+import 'package:sosangongin_platform/features/employee/add/contract_method_screen.dart';
+import 'package:sosangongin_platform/features/employee/add/invite_code_screen.dart';
+import 'package:sosangongin_platform/features/employee/employee_detail_screen.dart';
+import 'package:sosangongin_platform/features/employee/employee_list_screen.dart';
+import 'package:sosangongin_platform/features/employee/employee_provider.dart';
+import 'package:sosangongin_platform/features/employee/employee_role_select_screen.dart';
 import 'package:sosangongin_platform/l10n/app_localizations.dart';
 
-// 헬퍼
+// ── 헬퍼 ─────────────────────────────────────────────────
 
 GoRouter _buildTestRouter(String initialLocation) {
   return GoRouter(
@@ -64,6 +74,40 @@ GoRouter _buildTestRouter(String initialLocation) {
         builder: (context, state) =>
             NoticeDetailScreen(notice: state.extra as Notice),
       ),
+      GoRoute(
+        path: '/role',
+        builder: (context, state) => const RoleListScreen(),
+      ),
+      GoRoute(
+        path: '/role/add',
+        builder: (context, state) => const RoleAddScreen(),
+      ),
+      GoRoute(
+        path: '/role/detail',
+        builder: (context, state) =>
+            RoleDetailScreen(role: state.extra as RoleModel),
+      ),
+      GoRoute(
+        path: '/employee',
+        builder: (context, state) => const EmployeeListScreen(),
+      ),
+      GoRoute(
+        path: '/employee/detail',
+        builder: (context, state) =>
+            EmployeeDetailScreen(employee: state.extra as EmployeeModel),
+      ),
+      GoRoute(
+        path: '/employee/add/role-select',
+        builder: (context, state) => const EmployeeRoleSelectScreen(),
+      ),
+      GoRoute(
+        path: '/employee/add/contract-method',
+        builder: (context, state) => const ContractMethodScreen(),
+      ),
+      GoRoute(
+        path: '/employee/add/invite-code',
+        builder: (context, state) => const InviteCodeScreen(),
+      ),
     ],
   );
 }
@@ -79,7 +123,8 @@ Widget _buildTestApp(GoRouter router) {
   );
 }
 
-// Notice 모델이 notice_provider.dart로 이동됨
+// Mock 데이터
+
 final _mockNotice = Notice(
   id: 1,
   title: '정기 휴무일 안내',
@@ -90,7 +135,22 @@ final _mockNotice = Notice(
   createdAt: DateTime.now().toIso8601String(),
 );
 
-// ── 화면 렌더링 테스트 ─────────────────────────────────────
+final _mockRole = RoleModel(
+  id: 1,
+  name: '매니저',
+  description: 'manager',
+  permissions: const [],
+);
+
+final _mockEmployee = EmployeeModel(
+  id: 'emp_001',
+  name: '김민수',
+  role: _mockRole,
+  startDate: '2024.01.01',
+  status: EmployeeStatus.active,
+);
+
+// ── 화면 렌더링 테스트 ────────────────────────────────────
 
 void main() {
   group('화면 렌더링', () {
@@ -180,9 +240,84 @@ void main() {
       );
       await tester.pumpWidget(_buildTestApp(router));
       await tester.pumpAndSettle();
-
       expect(find.byType(NoticeDetailScreen), findsOneWidget);
       expect(find.text('정기 휴무일 안내'), findsOneWidget);
+    });
+
+    testWidgets('역할 목록', (tester) async {
+      final router = _buildTestRouter('/role');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(RoleListScreen), findsOneWidget);
+    });
+
+    testWidgets('역할 추가', (tester) async {
+      final router = _buildTestRouter('/role/add');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(RoleAddScreen), findsOneWidget);
+    });
+
+    testWidgets('역할 상세', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/role/detail',
+        initialExtra: _mockRole,
+        routes: [
+          GoRoute(
+            path: '/role/detail',
+            builder: (context, state) =>
+                RoleDetailScreen(role: state.extra as RoleModel),
+          ),
+        ],
+      );
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(RoleDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('직원 목록', (tester) async {
+      final router = _buildTestRouter('/employee');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(EmployeeListScreen), findsOneWidget);
+    });
+
+    testWidgets('직원 상세', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/employee/detail',
+        initialExtra: _mockEmployee,
+        routes: [
+          GoRoute(
+            path: '/employee/detail',
+            builder: (context, state) =>
+                EmployeeDetailScreen(employee: state.extra as EmployeeModel),
+          ),
+        ],
+      );
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(EmployeeDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('역할 선택', (tester) async {
+      final router = _buildTestRouter('/employee/add/role-select');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(EmployeeRoleSelectScreen), findsOneWidget);
+    });
+
+    testWidgets('계약방식 선택', (tester) async {
+      final router = _buildTestRouter('/employee/add/contract-method');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(ContractMethodScreen), findsOneWidget);
+    });
+
+    testWidgets('초대코드', (tester) async {
+      final router = _buildTestRouter('/employee/add/invite-code');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pumpAndSettle();
+      expect(find.byType(InviteCodeScreen), findsOneWidget);
     });
   });
 
@@ -210,6 +345,39 @@ void main() {
       await tester.pumpWidget(_buildTestApp(router));
       await tester.pumpAndSettle();
       expect(find.text('나중에 하기'), findsNothing);
+    });
+  });
+
+  // 역할 관리 첫 진입 분기
+
+  group('역할 관리 첫 진입 분기', () {
+    testWidgets('역할 없을 때 — empty state 노출', (tester) async {
+      // roleListProvider를 빈 목록으로 override
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            roleListProvider.overrideWith(
+                  (ref) => RoleListNotifier()..state = const AsyncData([]),
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: S.localizationsDelegates,
+            supportedLocales: S.supportedLocales,
+            locale: const Locale('ko'),
+            home: const Scaffold(body: RoleListScreen()),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('역할을 만들어보세요'), findsOneWidget);
+    });
+
+    testWidgets('역할 있을 때 — 목록 노출', (tester) async {
+      final router = _buildTestRouter('/role');
+      await tester.pumpWidget(_buildTestApp(router));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      expect(find.text('역할을 만들어보세요'), findsNothing);
     });
   });
 }

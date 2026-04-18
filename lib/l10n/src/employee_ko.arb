@@ -1,0 +1,55 @@
+{
+  "@@locale": "ko",
+
+  "contractMethodTitle": "근로계약서 등록",
+  "contractMethodHeading": "어떤 방식으로 등록할까요?",
+  "contractMethodDirectLabel": "PDF 직접 업로드",
+  "contractMethodDirectDesc": "PDF 파일을 직접 업로드해요",
+  "contractMethodTemplateLabel": "템플릿 불러오기",
+  "contractMethodTemplateDesc": "준비 중입니다",
+
+  "contractUploadTitle": "근로계약서 등록",
+  "contractUploadHeading": "근로계약서를 업로드해주세요",
+  "contractUploadSubtitle": "PDF 파일만 업로드 가능해요",
+  "contractUploadButton": "파일 선택",
+  "contractUploadNextButton": "다음",
+  "contractUploadEmptyError": "파일을 선택해주세요",
+
+  "contractViewerTitle": "계약서 확인",
+  "contractViewerConfirmButton": "다음",
+
+  "inviteCodeTitle": "초대 코드",
+  "inviteCodeHeading": "초대 코드가 생성됐어요!",
+  "inviteCodeSubtitle": "아래 코드를 직원에게 공유해주세요",
+  "inviteCodeCopyButton": "코드 복사",
+  "inviteCodeCopied": "클립보드에 복사됐어요",
+  "inviteCodeShareKakao": "카카오",
+  "inviteCodeShareLine": "라인",
+  "inviteCodeShareOther": "기타",
+  "inviteCodeDoneButton": "완료",
+  "inviteCodeShareKakaoButton": "카카오톡으로 공유하기",
+
+  "employeeManagementTitle": "직원 관리",
+  "employeeListEmptyHeading": "등록된 직원이 없어요",
+  "employeeListEmptySubtitle": "직원을 추가하고 관리해보세요",
+
+  "employeeDetailTitle": "직원 상세",
+  "employeeRoleLabel": "부여 역할",
+  "employeeStartDateLabel": "근무 시작일",
+  "employeeRoleChangeButton": "직원 롤 변경",
+  "employeeContractRequestButton": "근로계약서 수정 요청",
+  "employeeResignButton": "퇴직 처리",
+
+  "employeeRoleChangeTitle": "롤 변경",
+  "employeeResignDialogTitle": "퇴직 처리하시겠습니까?",
+  "employeeResignDialogMessage": "이 직원의 모든 권한이 해제되고\n퇴직 처리됩니다.",
+  "employeeStatusActive": "재직중",
+  "employeeStatusResigned": "퇴직",
+
+  "employeeRoleSelectTitle": "역할 선택",
+  "employeeRoleSelectHeading": "직원에게 할당할 역할을 선택해주세요",
+  "employeeRoleSelectSearchHint": "역할 검색",
+  "employeeRoleSelectEmpty": "검색 결과가 없어요",
+  "employeeRoleSelectNoRole": "알맞은 역할이 없다면?",
+  "employeeRoleSelectCreateButton": "새 역할 만들기"
+}

@@ -30,6 +30,8 @@ void main() {
     'consent',
     'account',
     'home',
+    'role',
+    'employee',
     'common', // 공통 (버튼, 에러 메시지 등)
   ];
 
