@@ -14,15 +14,15 @@ class RoleListTile extends StatelessWidget {
     required this.onTap,
   });
 
-  String _permissionLabel(BuildContext context, String key) {
+  String _permissionLabel(BuildContext context, PermissionModel permission) {
     final s = S.of(context);
-    switch (key) {
+    switch (permission.permissionName) {
       case PermissionKey.staffManage:    return s.permissionStaffManage;
       case PermissionKey.storeManage:    return s.permissionStoreManage;
       case PermissionKey.contractManage: return s.permissionContractManage;
       case PermissionKey.salaryManage:   return s.permissionSalaryManage;
       case PermissionKey.staffInvite:    return s.permissionStaffInvite;
-      default:                           return key;
+      default:                           return permission.permissionName;
     }
   }
 
@@ -31,13 +31,12 @@ class RoleListTile extends StatelessWidget {
     final rs = ResponsiveSize.of(context);
     final permissions = role.permissions;
 
-    // 최대 3개까지 표시, 초과시 +N개 표시
     const maxVisible = 3;
     final visible = permissions.take(maxVisible).toList();
     final overflow = permissions.length - maxVisible;
 
     final permissionText = [
-      ...visible.map((k) => _permissionLabel(context, k)),
+      ...visible.map((p) => _permissionLabel(context, p)),
       if (overflow > 0) '+$overflow개',
     ].join(' · ');
 

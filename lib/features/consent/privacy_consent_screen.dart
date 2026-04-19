@@ -16,18 +16,15 @@ class PrivacyConsentScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(consentProvider);
 
-    ref.listen<ConsentState>(consentProvider, (_, next) {
-      switch (next) {
-        case ConsentStateSuccess():
-          context.push(AuthPath.phoneVerification);
-        case ConsentStateError(:final message):
+    ref.listen<AsyncValue<void>>(consentProvider, (_, next) {
+      next.whenOrNull(
+        data: (_) => context.push(AuthPath.phoneVerification),
+        error: (e, _) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message)));
+              .showSnackBar(SnackBar(content: Text(e.toString())));
           ref.read(consentProvider.notifier).resetState();
-        case ConsentStateIdle():
-        case ConsentStateLoading():
-          break;
-      }
+        },
+      );
     });
 
     return Scaffold(
@@ -88,10 +85,11 @@ class PrivacyConsentScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context,
-      {required String title,
-        required String content,
-        required List<String> bullets}) {
+  Widget _buildSection(BuildContext context, {
+    required String title,
+    required String content,
+    required List<String> bullets,
+  }) {
     final rs = ResponsiveSize.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,14 +107,14 @@ class PrivacyConsentScreen extends ConsumerWidget {
   }
 
   Widget _buildBottomButton(
-      BuildContext context, WidgetRef ref, ConsentState state) {
+      BuildContext context, WidgetRef ref, AsyncValue<void> state) {
     final rs = ResponsiveSize.of(context);
     return Padding(
       padding: rs.fromLTRB(24, 0, 24, 24),
       child: PrimaryButton(
         text: S.of(context).agreeButton,
-        enabled: state is! ConsentStateLoading,
-        onPressed: state is ConsentStateLoading
+        enabled: !state.isLoading,
+        onPressed: state.isLoading
             ? null
             : () => ref.read(consentProvider.notifier).agreeAll(),
       ),

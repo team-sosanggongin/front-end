@@ -83,25 +83,24 @@ void main() {
   // ConsentNotifier
 
   group('ConsentNotifier (Mock)', () {
-    test('초기 상태는 Idle', () {
+    test('초기 상태는 AsyncData(null)', () {
       final container = _makeContainer();
-      expect(container.read(consentProvider), isA<ConsentStateIdle>());
+      expect(container.read(consentProvider), isA<AsyncData<void>>());
     });
 
     test('agreeAll 후 성공', () async {
       final container = _makeContainer();
       await container.read(consentProvider.notifier).agreeAll();
-      expect(container.read(consentProvider), isA<ConsentStateSuccess>());
+      expect(container.read(consentProvider), isA<AsyncData<void>>());
     });
 
-    test('resetState 호출 시 초기화', () async {
+    test('resetState 호출 시 AsyncData(null)로 초기화', () async {
       final container = _makeContainer();
       await container.read(consentProvider.notifier).agreeAll();
       container.read(consentProvider.notifier).resetState();
-      expect(container.read(consentProvider), isA<ConsentStateIdle>());
+      expect(container.read(consentProvider), isA<AsyncData<void>>());
     });
   });
-
   // BankListProvider
 
   group('BankListProvider', () {
