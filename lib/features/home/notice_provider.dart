@@ -79,12 +79,7 @@ class NoticeListNotifier extends StateNotifier<AsyncValue<List<Notice>>> {
     state = const AsyncLoading();
 
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        state = const AsyncData([]); // Mock: 빈 목록으로 빈 상태 UI 확인
-        return;
-      }
-
+      // GET /api/v1/notices
       final res = await _dio.get(
         _NoticeApiPath.list,
         queryParameters: {'page': _page, 'size': 10},
@@ -124,12 +119,7 @@ class NoticeDetailNotifier extends StateNotifier<AsyncValue<Notice?>> {
   Future<void> fetch() async {
     state = const AsyncLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        state = const AsyncData(null); // Mock: 상세는 목록에서 extra로 전달받은 데이터 사용
-        return;
-      }
-
+      // GET /api/v1/notices/{id}
       final res = await _dio.get(_NoticeApiPath.detail(_id));
       final data = res.data as Map<String, dynamic>;
       state = AsyncData(

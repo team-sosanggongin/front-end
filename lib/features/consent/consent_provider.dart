@@ -40,12 +40,7 @@ class ConsentNotifier extends StateNotifier<AsyncValue<void>> {
   Future<void> agreeAll() async {
     state = const AsyncLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        state = const AsyncData(null);
-        return;
-      }
-
+      // GET /api/v1/consents/pending
       final res = await _dio.get(_ConsentApiPath.pending);
       final data = res.data as Map<String, dynamic>;
 
@@ -56,6 +51,7 @@ class ConsentNotifier extends StateNotifier<AsyncValue<void>> {
 
       final List pendingConsents = data['pendingConsents'] as List;
       for (final consent in pendingConsents) {
+        // POST /api/v1/consents/agree
         await _dio.post(
           _ConsentApiPath.agree,
           data: {
