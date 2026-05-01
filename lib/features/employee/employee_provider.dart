@@ -59,8 +59,18 @@ final _mockManagerRole = RoleModel(
   id: 1,
   name: '매니저',
   description: 'manager',
-  permissions: ['staff_manage', 'store_manage', 'contract_manage',
-    'salary_manage', 'staff_invite'],
+  permissions: [
+    PermissionModel(id: 1, permissionName: PermissionKey.staffManage,
+        permDomain: 'STAFF', description: '', active: true),
+    PermissionModel(id: 2, permissionName: PermissionKey.storeManage,
+        permDomain: 'STORE', description: '', active: true),
+    PermissionModel(id: 3, permissionName: PermissionKey.contractManage,
+        permDomain: 'CONTRACT', description: '', active: true),
+    PermissionModel(id: 4, permissionName: PermissionKey.salaryManage,
+        permDomain: 'SALARY', description: '', active: true),
+    PermissionModel(id: 5, permissionName: PermissionKey.staffInvite,
+        permDomain: 'STAFF', description: '', active: true),
+  ],
 );
 
 final _mockEmployees = [
@@ -78,7 +88,10 @@ final _mockEmployees = [
       id: 2,
       name: '파트타이머',
       description: 'partTimer',
-      permissions: ['store_manage'],
+      permissions: [
+        PermissionModel(id: 2, permissionName: PermissionKey.storeManage,
+            permDomain: 'STORE', description: '', active: true),
+      ],
     ),
     startDate: '2024.03.15',
     status: EmployeeStatus.active,

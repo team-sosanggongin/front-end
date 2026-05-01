@@ -12,27 +12,23 @@ import 'widgets/permission_toggle_tile.dart';
 class _RoleAddState {
   final int step;
   final String? selectedTypeKey;
-  final String roleName;
-  final Set<String> enabledPermissions;
+  final Set<int> enabledPermissionIds;
 
   const _RoleAddState({
     this.step = 0,
     this.selectedTypeKey,
-    this.roleName = '',
-    this.enabledPermissions = const {},
+    this.enabledPermissionIds = const {},
   });
 
   _RoleAddState copyWith({
     int? step,
     String? selectedTypeKey,
-    String? roleName,
-    Set<String>? enabledPermissions,
+    Set<int>? enabledPermissionIds,
   }) =>
       _RoleAddState(
         step: step ?? this.step,
         selectedTypeKey: selectedTypeKey ?? this.selectedTypeKey,
-        roleName: roleName ?? this.roleName,
-        enabledPermissions: enabledPermissions ?? this.enabledPermissions,
+        enabledPermissionIds: enabledPermissionIds ?? this.enabledPermissionIds,
       );
 }
 
@@ -74,20 +70,24 @@ class _RoleAddScreenState extends ConsumerState<RoleAddScreen> {
   }
 
   void _onTypeSelected(String key) {
-    // TODO : API 연결 후 수정
-    final preset = presetPermissionsFor(key);
+    final presetKeys = presetPermissionsFor(key);
+    final allPerms = ref.read(permissionListProvider).valueOrNull ?? [];
+    final presetIds = allPerms
+        .where((p) => presetKeys.contains(p.permissionName))
+        .map((p) => p.id)
+        .toSet();
     setState(() {
       _state = _state.copyWith(
         selectedTypeKey: key,
-        enabledPermissions: Set.from(preset),
+        enabledPermissionIds: presetIds,
       );
     });
   }
 
-  void _onPermissionToggled(String key, bool value) {
-    final updated = Set<String>.from(_state.enabledPermissions);
-    value ? updated.add(key) : updated.remove(key);
-    setState(() => _state = _state.copyWith(enabledPermissions: updated));
+  void _onPermissionToggled(int id, bool value) {
+    final updated = Set<int>.from(_state.enabledPermissionIds);
+    value ? updated.add(id) : updated.remove(id);
+    setState(() => _state = _state.copyWith(enabledPermissionIds: updated));
   }
 
   bool _canProceed() {
@@ -97,9 +97,9 @@ class _RoleAddScreenState extends ConsumerState<RoleAddScreen> {
 
   Future<void> _submit() async {
     final success = await ref.read(roleMutationProvider.notifier).create(
-      name: _nameController.text.trim(),
+      roleName: _nameController.text.trim(),
       description: _state.selectedTypeKey ?? '',
-      permissions: _state.enabledPermissions.toList(),
+      permissionIds: _state.enabledPermissionIds.toList(),
     );
     if (success && mounted) context.pop();
   }
@@ -174,43 +174,49 @@ class _RoleAddScreenState extends ConsumerState<RoleAddScreen> {
   }
 
   Widget _buildStep2(BuildContext context, ResponsiveSize rs, S s) {
-    final permissions = ref.watch(permissionListProvider);
+    final permissionsAsync = ref.watch(permissionListProvider);
 
-    return ListView(
-      children: [
-        Padding(
-          padding: rs.pxy(horizontal: 24, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(s.roleNameLabel, style: AppTextStyles.label),
-              SizedBox(height: rs.h(8)),
-              TextField(
-                controller: _nameController,
-                onChanged: (_) => setState(() {}),
-                decoration: AppInputDecorations.outlined(
-                  hintText: s.roleNameHint,
+    return permissionsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text(s.networkError)),
+      data: (permissions) => ListView(
+        children: [
+          Padding(
+            padding: rs.pxy(horizontal: 24, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(s.roleNameLabel, style: AppTextStyles.label),
+                SizedBox(height: rs.h(8)),
+                TextField(
+                  controller: _nameController,
+                  onChanged: (_) => setState(() {}),
+                  decoration: AppInputDecorations.outlined(
+                    hintText: s.roleNameHint,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        const Divider(height: 1, color: AppColors.borderGray),
-        Padding(
-          padding: rs.pxy(horizontal: 24, vertical: 16),
-          child: Text(s.rolePermissionLabel, style: AppTextStyles.label),
-        ),
-        ...permissions.map((permission) => Column(
-          children: [
-            PermissionToggleTile(
-              permission: permission,
-              isEnabled: _state.enabledPermissions.contains(permission.key),
-              onChanged: (v) => _onPermissionToggled(permission.key, v),
+              ],
             ),
-            const Divider(height: 1, color: AppColors.borderGray),
-          ],
-        )),
-      ],
+          ),
+          const Divider(height: 1, color: AppColors.borderGray),
+          Padding(
+            padding: rs.pxy(horizontal: 24, vertical: 16),
+            child: Text(s.rolePermissionLabel, style: AppTextStyles.label),
+          ),
+          ...permissions.map((permission) => Column(
+            children: [
+              PermissionToggleTile(
+                permission: permission,
+                isEnabled: _state.enabledPermissionIds
+                    .contains(permission.id),
+                onChanged: (v) =>
+                    _onPermissionToggled(permission.id, v),
+              ),
+              const Divider(height: 1, color: AppColors.borderGray),
+            ],
+          )),
+        ],
+      ),
     );
   }
 }

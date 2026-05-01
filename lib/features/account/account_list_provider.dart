@@ -47,17 +47,9 @@ class AccountListNotifier extends StateNotifier<AccountListState> {
   final Dio _dio;
 
   Future<void> fetch() async {
-    // Mock일 때 이미 데이터 있으면 재fetch 안 함
-    if (EnvConfig.isMock && state is AccountListStateLoaded) return;
-
     state = AccountListStateLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 300));
-        state = AccountListStateLoaded([]);
-        return;
-      }
-
+      // GET /api/v1/bank-accounts
       final res = await _dio.get(_AccountApiPath.list);
       final data = res.data as Map<String, dynamic>;
       final accounts = (data['accounts'] as List)
@@ -79,9 +71,8 @@ class AccountListNotifier extends StateNotifier<AccountListState> {
 
   Future<void> deleteAccount(String accountId) async {
     try {
-      if (!EnvConfig.isMock) {
-        await _dio.delete(_AccountApiPath.detail(accountId));
-      }
+      // DELETE /api/v1/bank-accounts/{id}
+      await _dio.delete(_AccountApiPath.detail(accountId));
       if (state is AccountListStateLoaded) {
         final current = (state as AccountListStateLoaded).accounts;
         state = AccountListStateLoaded(
@@ -100,16 +91,15 @@ class AccountListNotifier extends StateNotifier<AccountListState> {
     required String accountAlias,
   }) async {
     try {
-      if (!EnvConfig.isMock) {
-        await _dio.put(
-          _AccountApiPath.detail(accountId),
-          data: {
-            'bankName': bankName,
-            'accountNumber': accountNumber,
-            'accountAlias': accountAlias,
-          },
-        );
-      }
+      // PUT /api/v1/bank-accounts/{id}
+      await _dio.put(
+        _AccountApiPath.detail(accountId),
+        data: {
+          'bankName': bankName,
+          'accountNumber': accountNumber,
+          'accountAlias': accountAlias,
+        },
+      );
       if (state is AccountListStateLoaded) {
         final current = (state as AccountListStateLoaded).accounts;
         state = AccountListStateLoaded(

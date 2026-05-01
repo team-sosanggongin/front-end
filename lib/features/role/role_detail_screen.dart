@@ -18,14 +18,14 @@ class RoleDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
-  late Set<String> _enabledPermissions;
+  late Set<int> _enabledPermissionIds;
   late TextEditingController _nameController;
   bool _isEdited = false;
 
   @override
   void initState() {
     super.initState();
-    _enabledPermissions = Set.from(widget.role.permissions);
+    _enabledPermissionIds = Set.from(widget.role.permissionIds);
     _nameController = TextEditingController(text: widget.role.name);
     _nameController.addListener(_onChanged);
   }
@@ -39,26 +39,26 @@ class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
   void _onChanged() {
     final nameChanged = _nameController.text.trim() != widget.role.name;
     final permChanged = !_setEquals(
-        _enabledPermissions, Set.from(widget.role.permissions));
+        _enabledPermissionIds, Set.from(widget.role.permissionIds));
     setState(() => _isEdited = nameChanged || permChanged);
   }
 
-  void _onPermissionToggled(String key, bool value) {
+  void _onPermissionToggled(int id, bool value) {
     setState(() {
-      value ? _enabledPermissions.add(key) : _enabledPermissions.remove(key);
+      value ? _enabledPermissionIds.add(id) : _enabledPermissionIds.remove(id);
     });
     _onChanged();
   }
 
-  bool _setEquals(Set<String> a, Set<String> b) =>
+  bool _setEquals(Set<int> a, Set<int> b) =>
       a.length == b.length && a.containsAll(b);
 
   Future<void> _submit() async {
     final success = await ref.read(roleMutationProvider.notifier).update(
       roleId: widget.role.id,
-      name: _nameController.text.trim(),
+      roleName: _nameController.text.trim(),
       description: widget.role.description,
-      permissions: _enabledPermissions.toList(),
+      permissionIds: _enabledPermissionIds.toList(),
     );
     if (success && mounted) context.pop();
   }
@@ -72,10 +72,8 @@ class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: rs.radius(16)),
         title: Text(s.roleDeleteDialogTitle),
-        content: Text(
-          s.roleDeleteDialogMessage,
-          style: AppTextStyles.caption,
-        ),
+        content: Text(s.roleDeleteDialogMessage,
+            style: AppTextStyles.caption),
         actions: [
           TextButton(
             onPressed: () => ctx.pop(),
@@ -85,7 +83,7 @@ class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
           ),
           TextButton(
             onPressed: () {
-              ref.read(roleListProvider.notifier).deleteRole(widget.role.id);
+              ref.read(roleMutationProvider.notifier).delete(widget.role.id);
               ctx.pop();
               context.pop();
             },
@@ -99,7 +97,7 @@ class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final permissions = ref.watch(permissionListProvider);
+    final permissionsAsync = ref.watch(permissionListProvider);
     final isMutating = ref.watch(roleMutationProvider).isLoading;
     final rs = ResponsiveSize.of(context);
     final s = S.of(context);
@@ -115,38 +113,44 @@ class _RoleDetailScreenState extends ConsumerState<RoleDetailScreen> {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: rs.pxy(horizontal: 24, vertical: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(s.roleNameLabel, style: AppTextStyles.label),
-                SizedBox(height: rs.h(8)),
-                TextField(
-                  controller: _nameController,
-                  decoration: AppInputDecorations.outlined(),
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 1, color: AppColors.borderGray),
-          Padding(
-            padding: rs.pxy(horizontal: 24, vertical: 16),
-            child: Text(s.rolePermissionLabel, style: AppTextStyles.label),
-          ),
-          ...permissions.map((permission) => Column(
-            children: [
-              PermissionToggleTile(
-                permission: permission,
-                isEnabled: _enabledPermissions.contains(permission.key),
-                onChanged: (v) => _onPermissionToggled(permission.key, v),
+      body: permissionsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text(s.networkError)),
+        data: (permissions) => ListView(
+          children: [
+            Padding(
+              padding: rs.pxy(horizontal: 24, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(s.roleNameLabel, style: AppTextStyles.label),
+                  SizedBox(height: rs.h(8)),
+                  TextField(
+                    controller: _nameController,
+                    decoration: AppInputDecorations.outlined(),
+                  ),
+                ],
               ),
-              const Divider(height: 1, color: AppColors.borderGray),
-            ],
-          )),
-        ],
+            ),
+            const Divider(height: 1, color: AppColors.borderGray),
+            Padding(
+              padding: rs.pxy(horizontal: 24, vertical: 16),
+              child: Text(s.rolePermissionLabel, style: AppTextStyles.label),
+            ),
+            ...permissions.map((permission) => Column(
+              children: [
+                PermissionToggleTile(
+                  permission: permission,
+                  isEnabled:
+                  _enabledPermissionIds.contains(permission.id),
+                  onChanged: (v) =>
+                      _onPermissionToggled(permission.id, v),
+                ),
+                const Divider(height: 1, color: AppColors.borderGray),
+              ],
+            )),
+          ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(

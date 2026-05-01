@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sosangongin_platform/features/auth/auth_provider.dart';
 import 'package:sosangongin_platform/features/consent/consent_provider.dart';
 import 'package:sosangongin_platform/features/my/user_provider.dart';
+import 'package:sosangongin_platform/features/role/role_provider.dart';
 
 // 헬퍼
 
@@ -13,6 +14,7 @@ ProviderContainer _makeContainer() {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   // AuthNotifier
 
   group('AuthNotifier', () {
@@ -21,60 +23,23 @@ void main() {
       expect(container.read(authProvider), isA<AuthStateIdle>());
     });
 
-    test('Mock 로그인 후 성공(NewUser) 반환', () async {
-      // ENV=LOCAL(isMock=true)일 때만 실행
-      final container = _makeContainer();
-      await container.read(authProvider.notifier).loginWithKakao();
-      final state = container.read(authProvider);
-      expect(state, isA<AuthStateSuccess>());
-      if (state is AuthStateSuccess) {
-        expect(state.result, isA<LoginResultNewUser>());
-      }
-    });
 
-    test('logout 후 상태 초기화', () async {
+    test('resetState 호출 시 초기화', () {
       final container = _makeContainer();
-      await container.read(authProvider.notifier).loginWithKakao();
-      await container.read(authProvider.notifier).logout();
-      expect(container.read(authProvider), isA<AuthStateIdle>());
-    });
-
-    test('resetState 호출 시 초기화', () async {
-      final container = _makeContainer();
-      await container.read(authProvider.notifier).loginWithKakao();
       container.read(authProvider.notifier).resetState();
       expect(container.read(authProvider), isA<AuthStateIdle>());
     });
   });
 
   // PhoneNotifier
-  group('PhoneNotifier (Mock)', () {
+  group('PhoneNotifier', () {
     test('초기 상태', () {
       final container = _makeContainer();
       expect(container.read(phoneProvider), isA<PhoneStateIdle>());
     });
 
-    test('requestCode 후 보낸 상태', () async {
+    test('resetState 호출 시 초기화', () {
       final container = _makeContainer();
-      await container.read(phoneProvider.notifier).requestCode('01012345678');
-      expect(container.read(phoneProvider), isA<PhoneStateSent>());
-    });
-
-    test('올바른 코드(000000) 입력 시 성공', () async {
-      final container = _makeContainer();
-      await container.read(phoneProvider.notifier).verifyCode('000000');
-      expect(container.read(phoneProvider), isA<PhoneStateSuccess>());
-    });
-
-    test('틀린 코드 입력 시 실패', () async {
-      final container = _makeContainer();
-      await container.read(phoneProvider.notifier).verifyCode('111111');
-      expect(container.read(phoneProvider), isA<PhoneStateFailed>());
-    });
-
-    test('resetState 호출 시 초기화', () async {
-      final container = _makeContainer();
-      await container.read(phoneProvider.notifier).verifyCode('000000');
       container.read(phoneProvider.notifier).resetState();
       expect(container.read(phoneProvider), isA<PhoneStateIdle>());
     });
@@ -82,23 +47,16 @@ void main() {
 
   // ConsentNotifier
 
-  group('ConsentNotifier (Mock)', () {
-    test('초기 상태는 Idle', () {
+  group('ConsentNotifier', () {
+    test('초기 상태는 AsyncData(null)', () {
       final container = _makeContainer();
-      expect(container.read(consentProvider), isA<ConsentStateIdle>());
+      expect(container.read(consentProvider), isA<AsyncData<void>>());
     });
 
-    test('agreeAll 후 성공', () async {
+    test('resetState 호출 시 AsyncData(null)로 초기화', () {
       final container = _makeContainer();
-      await container.read(consentProvider.notifier).agreeAll();
-      expect(container.read(consentProvider), isA<ConsentStateSuccess>());
-    });
-
-    test('resetState 호출 시 초기화', () async {
-      final container = _makeContainer();
-      await container.read(consentProvider.notifier).agreeAll();
       container.read(consentProvider.notifier).resetState();
-      expect(container.read(consentProvider), isA<ConsentStateIdle>());
+      expect(container.read(consentProvider), isA<AsyncData<void>>());
     });
   });
 
@@ -120,12 +78,12 @@ void main() {
   // UserProvider
 
   group('UserProvider', () {
-    test('초기값 ', () {
+    test('초기값 null', () {
       final container = _makeContainer();
       expect(container.read(userProvider), isNull);
     });
 
-    test(' 유저 정보 저장', () {
+    test('유저 정보 저장', () {
       final container = _makeContainer();
       const user = UserModel(id: 'user_001', name: '홍길동');
       container.read(userProvider.notifier).setUser(user);
@@ -169,6 +127,128 @@ void main() {
       };
       final account = AccountModel.fromJson(json);
       expect(account.accountAlias, '');
+    });
+  });
+
+  // RoleModel.fromJson
+
+  group('RoleModel.fromJson', () {
+    test('정상 파싱', () {
+      final json = {
+        'id': 1,
+        'roleName': '매니저',
+        'description': 'manager',
+        'permissions': [
+          {
+            'id': 1,
+            'permissionName': 'staff_manage',
+            'permDomain': 'STAFF',
+            'description': '직원 등록 및 관리',
+            'active': true,
+          }
+        ],
+      };
+
+      final role = RoleModel.fromJson(json);
+
+      expect(role.id, 1);
+      expect(role.name, '매니저');
+      expect(role.description, 'manager');
+      expect(role.permissions.length, 1);
+      expect(role.permissions.first.permissionName, 'staff_manage');
+    });
+
+    test('permissions 비어있을 때', () {
+      final json = {
+        'id': 1,
+        'roleName': '매니저',
+        'description': 'manager',
+        'permissions': [],
+      };
+
+      final role = RoleModel.fromJson(json);
+      expect(role.permissions, isEmpty);
+      expect(role.permissionIds, isEmpty);
+      expect(role.permissionKeys, isEmpty);
+    });
+
+    test('description, permissions null일 때 기본값', () {
+      final json = {
+        'id': 1,
+        'roleName': '매니저',
+        'description': null,
+        'permissions': null,
+      };
+
+      final role = RoleModel.fromJson(json);
+      expect(role.description, '');
+      expect(role.permissions, isEmpty);
+    });
+
+    test('permissionIds, permissionKeys getter', () {
+      final json = {
+        'id': 1,
+        'roleName': '매니저',
+        'description': 'manager',
+        'permissions': [
+          {
+            'id': 1,
+            'permissionName': 'staff_manage',
+            'permDomain': 'STAFF',
+            'description': '',
+            'active': true,
+          },
+          {
+            'id': 2,
+            'permissionName': 'store_manage',
+            'permDomain': 'STORE',
+            'description': '',
+            'active': true,
+          },
+        ],
+      };
+
+      final role = RoleModel.fromJson(json);
+      expect(role.permissionIds, [1, 2]);
+      expect(role.permissionKeys, ['staff_manage', 'store_manage']);
+    });
+  });
+
+  // PermissionModel.fromJson
+
+  group('PermissionModel.fromJson', () {
+    test('정상 파싱', () {
+      final json = {
+        'id': 1,
+        'permissionName': 'staff_manage',
+        'permDomain': 'STAFF',
+        'description': '직원 등록 및 관리',
+        'active': true,
+      };
+
+      final permission = PermissionModel.fromJson(json);
+
+      expect(permission.id, 1);
+      expect(permission.permissionName, 'staff_manage');
+      expect(permission.permDomain, 'STAFF');
+      expect(permission.description, '직원 등록 및 관리');
+      expect(permission.active, true);
+    });
+
+    test('optional 필드 null일 때 기본값', () {
+      final json = {
+        'id': 1,
+        'permissionName': 'staff_manage',
+        'permDomain': null,
+        'description': null,
+        'active': null,
+      };
+
+      final permission = PermissionModel.fromJson(json);
+
+      expect(permission.permDomain, '');
+      expect(permission.description, '');
+      expect(permission.active, true);
     });
   });
 }

@@ -44,9 +44,8 @@ abstract class _AuthApiPath {
 
 // Provider
 final authProvider =
-StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(ref.read(dioProvider));
-});
+StateNotifierProvider<AuthNotifier, AuthState>(
+        (ref) => AuthNotifier(ref.read(dioProvider)));
 
 // Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -67,14 +66,35 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  // Mock 로그인 — 카카오 SDK 없이 임시 토큰 저장
+  // Mock 로그인 — 카카오 SDK 없이 백엔드 login-callback 호출
   Future<LoginResult> _mockLogin() async {
-    await Future.delayed(const Duration(milliseconds: 500)); // 로딩 느낌용
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    final res = await _dio.post(
+      _AuthApiPath.loginCallback,
+      data: {
+        'code': 'mock-code',
+        'provider': 'KAKAO',
+        'agentType': 'ANDROID',
+        'deviceInfo': 'ANDROID',
+      },
+    );
+
+    final data = res.data as Map<String, dynamic>;
+
+    if (data['accessToken'] == null) {
+      return LoginResultNewUser();
+    }
+
     await Future.wait([
-      _storage.write(key: _TokenKey.accessToken, value: 'mock_access_token'),
-      _storage.write(key: _TokenKey.refreshToken, value: 'mock_refresh_token'),
+      _storage.write(
+          key: _TokenKey.accessToken,
+          value: data['accessToken'] as String),
+      _storage.write(
+          key: _TokenKey.refreshToken,
+          value: data['refreshToken'] as String),
     ]);
-    return LoginResultNewUser(); // 시뮬은 항상 신규 유저 플로우
+    return LoginResultExistingUser();
   }
 
   // 실제 로그인 — 카카오 SDK → 백엔드
@@ -103,17 +123,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     await Future.wait([
       _storage.write(
-          key: _TokenKey.accessToken, value: data['accessToken'] as String),
+          key: _TokenKey.accessToken,
+          value: data['accessToken'] as String),
       _storage.write(
-          key: _TokenKey.refreshToken, value: data['refreshToken'] as String),
+          key: _TokenKey.refreshToken,
+          value: data['refreshToken'] as String),
     ]);
     return LoginResultExistingUser();
   }
 
   Future<bool> hasValidToken() async {
-    // 플로우 안정화 이후에는 아래 isMock 분기 제거
-    if (EnvConfig.isMock) return false;
-
     final token = await _storage.read(key: _TokenKey.accessToken);
     return token != null;
   }
@@ -144,28 +163,23 @@ class PhoneStateError extends PhoneState {
   final String message;
 }
 
-// ── Provider ─────────────────────────────────────────────
+//  Provider
 
 final phoneProvider =
-StateNotifierProvider<PhoneNotifier, PhoneState>((ref) {
-  return PhoneNotifier(ref.read(dioProvider));
-});
+StateNotifierProvider<PhoneNotifier, PhoneState>(
+        (ref) => PhoneNotifier(ref.read(dioProvider)));
 
-// ── Notifier ─────────────────────────────────────────────
+// Notifier
 
 class PhoneNotifier extends StateNotifier<PhoneState> {
   PhoneNotifier(this._dio) : super(PhoneStateIdle());
 
   final Dio _dio;
+  final _storage = const FlutterSecureStorage();
 
   Future<void> requestCode(String phoneNumber) async {
     state = PhoneStateLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        state = PhoneStateSent();
-        return;
-      }
       await _dio.post(
         _AuthApiPath.verifyPhone,
         data: {'code': phoneNumber, 'phoneVerificationRequest': true},
@@ -179,19 +193,12 @@ class PhoneNotifier extends StateNotifier<PhoneState> {
   Future<void> verifyCode(String code) async {
     state = PhoneStateLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        // Mock: 000000이면 성공, 아니면 실패
-        state = code == '000000' ? PhoneStateSuccess() : PhoneStateFailed();
-        return;
-      }
       await _dio.post(
         _AuthApiPath.verifyPhone,
         data: {'code': code, 'phoneVerificationRequest': false},
       );
       state = PhoneStateSuccess();
     } catch (e) {
-      // 인증번호 틀림 → 실패 처리
       state = PhoneStateFailed();
     }
   }

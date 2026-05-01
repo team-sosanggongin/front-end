@@ -4,33 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/network/dio_provider.dart';
 import '../../utils/env_config.dart';
 
-//  상태
-sealed class ConsentState {}
+// API 경로
 
-class ConsentStateIdle extends ConsentState {}
-
-class ConsentStateLoading extends ConsentState {}
-
-class ConsentStateSuccess extends ConsentState {}
-
-class ConsentStateError extends ConsentState {
-  ConsentStateError(this.message);
-  final String message;
-}
-
-//  API 경로
 abstract class _ConsentApiPath {
   static const pending = 'api/v1/consents/pending';
-  static const agree = 'api/v1/consents/agree';
+  static const agree   = 'api/v1/consents/agree';
 }
 
 // Provider
-final consentProvider =
-StateNotifierProvider<ConsentNotifier, ConsentState>((ref) {
-  return ConsentNotifier(ref.read(dioProvider));
-});
 
-//  은행 목록
+final consentProvider =
+StateNotifierProvider<ConsentNotifier, AsyncValue<void>>(
+        (ref) => ConsentNotifier(ref.read(dioProvider)));
+
+// 은행 목록
+
 final bankListProvider = Provider<List<String>>((ref) {
   return const [
     'KB국민은행',
@@ -42,31 +30,28 @@ final bankListProvider = Provider<List<String>>((ref) {
   ];
 });
 
-//Notifier
-class ConsentNotifier extends StateNotifier<ConsentState> {
-  ConsentNotifier(this._dio) : super(ConsentStateIdle());
+// Notifier
+
+class ConsentNotifier extends StateNotifier<AsyncValue<void>> {
+  ConsentNotifier(this._dio) : super(const AsyncData(null));
 
   final Dio _dio;
 
   Future<void> agreeAll() async {
-    state = ConsentStateLoading();
+    state = const AsyncLoading();
     try {
-      if (EnvConfig.isMock) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        state = ConsentStateSuccess();
-        return;
-      }
-
+      // GET /api/v1/consents/pending
       final res = await _dio.get(_ConsentApiPath.pending);
       final data = res.data as Map<String, dynamic>;
 
       if (data['allAgreed'] == true) {
-        state = ConsentStateSuccess();
+        state = const AsyncData(null);
         return;
       }
 
       final List pendingConsents = data['pendingConsents'] as List;
       for (final consent in pendingConsents) {
+        // POST /api/v1/consents/agree
         await _dio.post(
           _ConsentApiPath.agree,
           data: {
@@ -76,11 +61,11 @@ class ConsentNotifier extends StateNotifier<ConsentState> {
         );
       }
 
-      state = ConsentStateSuccess();
+      state = const AsyncData(null);
     } catch (e) {
-      state = ConsentStateError(e.toString());
+      state = AsyncError(e, StackTrace.current);
     }
   }
 
-  void resetState() => state = ConsentStateIdle();
+  void resetState() => state = const AsyncData(null);
 }

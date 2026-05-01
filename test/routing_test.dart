@@ -23,6 +23,7 @@ import 'package:sosangongin_platform/features/employee/employee_detail_screen.da
 import 'package:sosangongin_platform/features/employee/employee_list_screen.dart';
 import 'package:sosangongin_platform/features/employee/employee_provider.dart';
 import 'package:sosangongin_platform/features/employee/employee_role_select_screen.dart';
+import 'package:sosangongin_platform/core/network/dio_provider.dart';
 import 'package:sosangongin_platform/l10n/app_localizations.dart';
 
 // ── 헬퍼 ─────────────────────────────────────────────────
@@ -357,7 +358,8 @@ void main() {
         ProviderScope(
           overrides: [
             roleListProvider.overrideWith(
-                  (ref) => RoleListNotifier()..state = const AsyncData([]),
+                  (ref) => RoleListNotifier(ref.read(dioProvider))
+                ..state = const AsyncData([]),
             ),
           ],
           child: MaterialApp(

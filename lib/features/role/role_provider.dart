@@ -1,4 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/network/dio_provider.dart';
+
+// 모델
 
 class RoleModel {
   const RoleModel({
@@ -11,21 +15,46 @@ class RoleModel {
   final int id;
   final String name;
   final String description;
-  final List<String> permissions;
+  final List<PermissionModel> permissions;
+
+  List<String> get permissionKeys =>
+      permissions.map((p) => p.permissionName).toList();
+
+  List<int> get permissionIds => permissions.map((p) => p.id).toList();
 
   factory RoleModel.fromJson(Map<String, dynamic> json) => RoleModel(
     id: json['id'] as int,
-    name: json['name'] as String,
+    name: json['roleName'] as String,
     description: json['description'] as String? ?? '',
     permissions: (json['permissions'] as List? ?? [])
-        .map((e) => e as String)
+        .map((e) => PermissionModel.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }
 
 class PermissionModel {
-  const PermissionModel({required this.key});
-  final String key;
+  const PermissionModel({
+    required this.id,
+    required this.permissionName,
+    required this.permDomain,
+    required this.description,
+    required this.active,
+  });
+
+  final int id;
+  final String permissionName;
+  final String permDomain;
+  final String description;
+  final bool active;
+
+  factory PermissionModel.fromJson(Map<String, dynamic> json) =>
+      PermissionModel(
+        id: json['id'] as int,
+        permissionName: json['permissionName'] as String,
+        permDomain: json['permDomain'] as String? ?? '',
+        description: json['description'] as String? ?? '',
+        active: json['active'] as bool? ?? true,
+      );
 }
 
 // 권한 키 상수
@@ -38,69 +67,60 @@ abstract class PermissionKey {
   static const staffInvite    = 'staff_invite';
 }
 
-//  Mock 데이터
+// 역할 유형별 권한 프리셋
 
-const _mockPermissions = [
-  PermissionModel(key: PermissionKey.staffManage),
-  PermissionModel(key: PermissionKey.storeManage),
-  PermissionModel(key: PermissionKey.contractManage),
-  PermissionModel(key: PermissionKey.salaryManage),
-  PermissionModel(key: PermissionKey.staffInvite),
-];
-
-// 역할 유형별 기본 권한 프리셋
-const _presetPermissions = {
-  'manager': [
+const _presetPermissionKeys = {
+  'manager':  [
     PermissionKey.staffManage,
     PermissionKey.storeManage,
     PermissionKey.contractManage,
     PermissionKey.salaryManage,
     PermissionKey.staffInvite,
   ],
-  'partTimer': [
-    PermissionKey.storeManage,
-  ],
-  'employee': [
-    PermissionKey.storeManage,
-    PermissionKey.contractManage,
-  ],
-  'newRole': <String>[],
+  'partTimer': [PermissionKey.storeManage],
+  'employee':  [PermissionKey.storeManage, PermissionKey.contractManage],
+  'newRole':   <String>[],
 };
 
 List<String> presetPermissionsFor(String typeKey) =>
-    List.from(_presetPermissions[typeKey] ?? []);
+    List.from(_presetPermissionKeys[typeKey] ?? []);
 
-final _mockRoles = [
-  RoleModel(
-    id: 1,
-    name: '매니저',
-    description: 'manager',
-    permissions: _presetPermissions['manager']!,
-  ),
-  RoleModel(
-    id: 2,
-    name: '파트타이머',
-    description: 'partTimer',
-    permissions: _presetPermissions['partTimer']!,
-  ),
-];
+// API
+
+abstract class _RoleApiPath {
+  static const mine        = 'api/v1/roles/mine';
+  static const permissions = 'api/v1/roles/permissions';
+  static const create      = 'api/v1/roles';
+  static String detail(int id) => 'api/v1/roles/$id';
+  static String update(int id) => 'api/v1/roles/$id';
+  static String delete(int id) => 'api/v1/roles/$id';
+}
 
 // 역할 목록 Provider
-// TODO: API 연동 시 수정
 
 final roleListProvider =
 StateNotifierProvider<RoleListNotifier, AsyncValue<List<RoleModel>>>(
-        (ref) => RoleListNotifier());
+        (ref) => RoleListNotifier(ref.read(dioProvider)));
 
 class RoleListNotifier extends StateNotifier<AsyncValue<List<RoleModel>>> {
-  RoleListNotifier() : super(const AsyncLoading()) {
+  RoleListNotifier(this._dio) : super(const AsyncLoading()) {
     fetch();
   }
 
+  final Dio _dio;
+
   Future<void> fetch({bool refresh = false}) async {
     state = const AsyncLoading();
-    await Future.delayed(const Duration(milliseconds: 300));
-    state = AsyncData(List.from(_mockRoles));
+    try {
+      // GET /api/v1/roles/mine
+      final res = await _dio.get(_RoleApiPath.mine);
+      final list = (res.data['roles'] as List)
+          .map((e) => RoleModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      state = AsyncData(list);
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+    }
   }
 
   void addRole(RoleModel role) {
@@ -116,43 +136,68 @@ class RoleListNotifier extends StateNotifier<AsyncValue<List<RoleModel>>> {
 
   void deleteRole(int id) {
     final current = state.valueOrNull ?? [];
-
     state = AsyncData(current.where((r) => r.id != id).toList());
   }
 }
 
-//권한 목록 Provider
+// 권한 목록 Provider
 
 final permissionListProvider =
-Provider<List<PermissionModel>>((ref) => _mockPermissions);
+StateNotifierProvider<PermissionListNotifier,
+    AsyncValue<List<PermissionModel>>>(
+        (ref) => PermissionListNotifier(ref.read(dioProvider)));
 
-// 역할 생성/수정 Provider
+class PermissionListNotifier
+    extends StateNotifier<AsyncValue<List<PermissionModel>>> {
+  PermissionListNotifier(this._dio) : super(const AsyncLoading()) {
+    fetch();
+  }
+
+  final Dio _dio;
+
+  Future<void> fetch() async {
+    state = const AsyncLoading();
+    try {
+      // GET /api/v1/roles/permissions
+      final res = await _dio.get(_RoleApiPath.permissions);
+      final list = (res.data['permissions'] as List)
+          .map((e) => PermissionModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      state = AsyncData(list);
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+    }
+  }
+}
+
+// 역할 생성/수정/삭제 Provider
 
 final roleMutationProvider =
 StateNotifierProvider<RoleMutationNotifier, AsyncValue<void>>(
-        (ref) => RoleMutationNotifier(ref));
+        (ref) => RoleMutationNotifier(ref.read(dioProvider), ref));
 
 class RoleMutationNotifier extends StateNotifier<AsyncValue<void>> {
-  RoleMutationNotifier(this._ref) : super(const AsyncData(null));
+  RoleMutationNotifier(this._dio, this._ref) : super(const AsyncData(null));
 
+  final Dio _dio;
   final Ref _ref;
 
   Future<bool> create({
-    required String name,
+    required String roleName,
     required String description,
-    required List<String> permissions,
+    required List<int> permissionIds,
   }) async {
     state = const AsyncLoading();
     try {
-      await Future.delayed(const Duration(milliseconds: 300));
-      // TODO: API 연동 시 Mock 코드 제거 후 교체
-      final newRole = RoleModel(
-        id: DateTime.now().millisecondsSinceEpoch,
-        name: name,
-        description: description,
-        permissions: permissions,
-      );
-      _ref.read(roleListProvider.notifier).addRole(newRole);
+      // POST /api/v1/roles
+      final res = await _dio.post(_RoleApiPath.create, data: {
+        'roleName': roleName,
+        'description': description,
+        'permissionIds': permissionIds,
+      });
+      final created = RoleModel.fromJson(
+          res.data['role'] as Map<String, dynamic>);
+      _ref.read(roleListProvider.notifier).addRole(created);
       state = const AsyncData(null);
       return true;
     } catch (e) {
@@ -163,21 +208,34 @@ class RoleMutationNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<bool> update({
     required int roleId,
-    required String name,
+    required String roleName,
     required String description,
-    required List<String> permissions,
+    required List<int> permissionIds,
   }) async {
     state = const AsyncLoading();
     try {
-      await Future.delayed(const Duration(milliseconds: 300));
-      // TODO: API 연동 시 Mock 코드 제거 후 교체
-      final updated = RoleModel(
-        id: roleId,
-        name: name,
-        description: description,
-        permissions: permissions,
-      );
+      // PUT /api/v1/roles/{roleId}
+      final res = await _dio.put(_RoleApiPath.update(roleId), data: {
+        'roleName': roleName,
+        'description': description,
+        'permissionIds': permissionIds,
+      });
+      final updated = RoleModel.fromJson(
+          res.data['role'] as Map<String, dynamic>);
       _ref.read(roleListProvider.notifier).updateRole(updated);
+      state = const AsyncData(null);
+      return true;
+    } catch (e) {
+      state = AsyncError(e, StackTrace.current);
+      return false;
+    }
+  }
+
+  Future<bool> delete(int roleId) async {
+    state = const AsyncLoading();
+    try {
+      // API 확인 후 수정 및 삭제
+      _ref.read(roleListProvider.notifier).deleteRole(roleId);
       state = const AsyncData(null);
       return true;
     } catch (e) {
